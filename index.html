@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pika__Ann 海外代購選品店 - by Ann</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons CDN -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        line: '#06C755',
+                        'line-hover': '#05b04a',
+                        threads: '#000000',
+                        myship: '#E65100',
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            800: '#9a3412',
+                            900: '#431407'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .badge-pulse {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-stone-100/70 text-stone-900 font-sans min-h-screen flex flex-col selection:bg-amber-100">
+
+    <!-- 頂端公告欄 (整合 Line@、Threads、賣貨便免運門檻) -->
+    <div class="bg-stone-900 text-stone-200 text-xs py-1.5 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 tracking-wide">
+        <div class="flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-line animate-ping"></span>
+            <span><strong>Pika__Ann</strong> 官方代購 ✦ 運送方式：<strong>7-11 賣貨便</strong> (運費 $38，滿 $1,500 免運！)</span>
+        </div>
+        
+        <div class="flex items-center space-x-3 text-[11px]">
+            <a id="top-line-link" href="https://line.me/R/ti/p/@pika__ann" target="_blank" class="text-stone-300 hover:text-line transition flex items-center space-x-1">
+                <i class="ph ph-chat-circle-dots text-line text-sm"></i>
+                <span>LINE@ 客服</span>
+            </a>
+            <span class="text-stone-600">|</span>
+            <a href="https://threads.net/@pika__ann" target="_blank" class="text-stone-300 hover:text-white transition flex items-center space-x-1">
+                <i class="ph ph-at text-white text-sm"></i>
+                <span>Threads</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 導航列 (買家純淨前台視角，雙擊 LOGO 解鎖後台) -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-stone-200 shadow-sm">
+        <div class="max-w-[1500px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between">
+            <!-- 品牌 LOGO (連點 3 下解鎖 Ann 賣家後台) -->
+            <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretAdminClick()" title="連點 3 下開啟賣家後台">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-rose-500 text-white flex items-center justify-center font-bold text-lg shadow-md tracking-tighter">
+                    PA
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl font-black tracking-tight text-stone-900 font-serif">Pika__Ann</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">海外選品</span>
+                    </div>
+                    <span class="text-[10px] text-stone-500 block">Curated by Ann ✦ 正品代購</span>
+                </div>
+            </div>
+
+            <!-- 賣家後台按鈕組（解鎖後呈現） -->
+            <div id="admin-nav-group" class="hidden flex items-center bg-stone-200/80 p-1 rounded-xl border border-amber-300">
+                <button id="nav-btn-store" onclick="switchTab('store')" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white text-stone-900 shadow-sm">
+                    選品前台
+                </button>
+                <button id="nav-btn-sheet" onclick="switchTab('sheet')" class="px-3 py-1 rounded-lg text-xs font-semibold text-stone-600 hover:text-stone-900">
+                    試算表端點設定
+                </button>
+                <button id="nav-btn-admin" onclick="switchTab('admin')" class="px-3 py-1 rounded-lg text-xs font-semibold text-stone-600 hover:text-stone-900 flex items-center space-x-1">
+                    <span>訂單分類管理</span>
+                    <span id="admin-badge" class="bg-amber-500 text-white text-[10px] px-1.5 rounded-full">0</span>
+                </button>
+                <button onclick="lockAdminMode()" class="px-2 py-1 text-stone-400 hover:text-stone-700 text-xs" title="鎖定離開後台">
+                    <i class="ph ph-lock-key"></i>
+                </button>
+            </div>
+
+            <!-- 購物車與捷徑 -->
+            <div class="flex items-center space-x-2.5">
+                <a id="nav-line-link" href="https://line.me/R/ti/p/@pika__ann" target="_blank" class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 transition flex items-center space-x-1" title="前往 LINE@ 官方客服">
+                    <i class="ph ph-chat-circle-dots text-2xl text-line"></i>
+                </a>
+
+                <button onclick="toggleCartModal(true)" class="relative p-2.5 rounded-xl bg-stone-900 text-white hover:bg-stone-800 transition">
+                    <i class="ph ph-bag text-lg"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-500 text-white text-[11px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主體內容 -->
+    <main class="flex-1 max-w-[1500px] w-full mx-auto px-3 sm:px-6 py-4">
+
+        <!-- =================== 買家選購前台 =================== -->
+        <section id="view-store" class="space-y-4">
+            
+            <!-- 免運提示 -->
+            <div class="bg-gradient-to-r from-orange-500 via-amber-600 to-stone-900 text-white rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="space-y-1 text-center md:text-left">
+                    <div class="inline-flex items-center space-x-1.5 bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur">
+                        <i class="ph ph-truck text-sm"></i>
+                        <span>7-11 賣貨便常態配合 ✦ 滿 NT$1,500 免運 (未達運費 $38)</span>
+                    </div>
+                    <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
+                    <p class="text-xs text-orange-100">所有現貨 24H 快速包裝寄送，預購品項收團後約 2-3 周抵台出貨</p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 w-full md:w-80 text-xs space-y-1.5">
+                    <div class="flex justify-between items-center text-[11px]">
+                        <span>賣貨便免運進度 ($1,500 門檻)</span>
+                        <span id="free-shipping-tag" class="font-bold text-amber-200">還差 $1,500</span>
+                    </div>
+                    <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+                        <div id="free-shipping-bar" class="bg-amber-300 h-full w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 四大獨立類別按鈕 (無全部選品標籤，分開選購) -->
+            <div class="bg-white p-3.5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                    <div class="flex items-center flex-wrap gap-2">
+                        <span class="text-xs font-bold text-stone-400 mr-1 flex items-center">
+                            <i class="ph ph-tag mr-1"></i>商品分類:
+                        </span>
+                        
+                        <button onclick="selectCategory('doll')" id="cat-btn-doll" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-amber-500 text-white shadow-sm shadow-amber-200">
+                            <span>🧸 娃娃 / 吊飾</span>
+                            <span id="badge-count-doll" class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full">0</span>
+                        </button>
+
+                        <button onclick="selectCategory('keychain')" id="cat-btn-keychain" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
+                            <span>🔑 鑰匙圈</span>
+                            <span id="badge-count-keychain" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
+                        </button>
+
+                        <button onclick="selectCategory('decor')" id="cat-btn-decor" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
+                            <span>🖼️ 裝飾品</span>
+                            <span id="badge-count-decor" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
+                        </button>
+
+                        <button onclick="selectCategory('home')" id="cat-btn-home" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
+                            <span>🏠 居家用品</span>
+                            <span id="badge-count-home" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <select id="type-filter" onchange="renderProducts()" class="bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="all">全部模式 (現貨+預購)</option>
+                            <option value="instock">⚡ 僅看現貨</option>
+                            <option value="preorder">✈️ 僅看預購</option>
+                        </select>
+
+                        <div class="relative w-40 sm:w-52">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-2 text-stone-400"></i>
+                            <input type="text" id="product-search" oninput="renderProducts()" placeholder="搜尋選品名稱..." class="w-full bg-stone-50 border border-stone-200 rounded-xl pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
+                    <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong></span>
+                    <span class="text-emerald-700 font-medium flex items-center space-x-1">
+                        <i class="ph ph-check-circle"></i>
+                        <span>已連線 Ann 選品庫存</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 商品高密度展示 (一列多欄) -->
+            <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+            </div>
+        </section>
+
+        <!-- =================== 賣家專屬：試算表端點設定 =================== -->
+        <section id="view-sheet" class="hidden space-y-5">
+            <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-stone-200">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">後台端點</span>
+                            <h2 class="text-lg font-bold text-stone-900 font-serif">Google Apps Script Web App 連結設定</h2>
+                        </div>
+                    <button onclick="testConnectionToSheet()" id="test-conn-btn" class="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 transition">
+                        <i class="ph ph-plugs-connected"></i>
+                        <span>測試端點連線狀態</span>
+                    </button>
+                </div>
+
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                    <label class="block text-xs font-bold text-stone-800">
+                        Apps Script Web App 網址 (doPost 接收訂單端點) *
+                    </label>
+                    <input type="url" id="sheet-app-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <p class="text-[11px] text-stone-500">所有買家在前台提交的訂單都會即時透過此網址送入 Google 試算表，並觸發 LINE 通知。</p>
+                </div>
+
+                <!-- 連線測試結果即時狀態面板 (取代原生 alert) -->
+                <div id="conn-result-box" class="hidden p-4 rounded-xl border text-xs space-y-1.5 transition-all"></div>
+
+                <div class="flex justify-end">
+                    <button onclick="saveAdminSettings()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition shadow">
+                        儲存端點配置
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== 賣家專屬：訂單分類管理 (含狀態分頁籤) =================== -->
+        <section id="view-admin" class="hidden space-y-5">
+            <!-- 數據統計看板 -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
+                    <span class="text-xs text-stone-500 font-medium">總訂單數</span>
+                    <p id="stat-total-orders" class="text-2xl font-bold text-stone-900 mt-1 font-mono">0</p>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
+                    <span class="text-xs text-stone-500 font-medium">待採購/處理中</span>
+                    <p id="stat-pending-orders" class="text-2xl font-bold text-amber-600 mt-1 font-mono">0</p>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
+                    <span class="text-xs text-stone-500 font-medium">賣貨便免運單數</span>
+                    <p id="stat-free-ship-orders" class="text-2xl font-bold text-emerald-600 mt-1 font-mono">0</p>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
+                    <span class="text-xs text-stone-500 font-medium">累積金額 (含運)</span>
+                    <p id="stat-total-revenue" class="text-2xl font-bold text-stone-900 mt-1 font-mono">$0</p>
+                </div>
+            </div>
+
+            <!-- 訂單分類列表 -->
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div class="p-4 bg-stone-50 border-b border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <h3 class="font-bold text-sm text-stone-900 flex items-center space-x-2">
+                        <i class="ph ph-receipt text-lg text-amber-600"></i>
+                        <span>Pika__Ann 訂單分頁管家</span>
+                    </h3>
+
+                    <button onclick="refreshOrdersFromSheet()" class="text-xs bg-white border border-stone-300 hover:bg-stone-100 text-stone-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 shadow-xs">
+                        <i class="ph ph-arrow-clockwise"></i>
+                        <span>從試算表重新同步訂單</span>
+                    </button>
+                </div>
+
+                <!-- 🌟 狀態分頁導航標籤 (Tabs) -->
+                <div class="border-b border-stone-200 bg-white px-3 sm:px-4 flex gap-1 sm:gap-2 overflow-x-auto text-xs font-semibold pt-2 scrollbar-none">
+                    <button onclick="setOrderTab('ALL')" id="tab-btn-ALL" class="order-tab-btn py-2.5 px-3 border-b-2 border-stone-900 text-stone-900 flex items-center space-x-1.5 transition">
+                        <span>全部訂單</span>
+                        <span id="tab-count-ALL" class="bg-stone-200 text-stone-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+
+                    <button onclick="setOrderTab('NEW')" id="tab-btn-NEW" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
+                        <span>新進訂單</span>
+                        <span id="tab-count-NEW" class="bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+
+                    <button onclick="setOrderTab('PURCHASING')" id="tab-btn-PURCHASING" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
+                        <span>採購中</span>
+                        <span id="tab-count-PURCHASING" class="bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+
+                    <button onclick="setOrderTab('FLIGHT')" id="tab-btn-FLIGHT" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
+                        <span>空運抵台</span>
+                        <span id="tab-count-FLIGHT" class="bg-purple-100 text-purple-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+
+                    <button onclick="setOrderTab('SHIPPED')" id="tab-btn-SHIPPED" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
+                        <span>已出貨(賣貨便)</span>
+                        <span id="tab-count-SHIPPED" class="bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+
+                    <button onclick="setOrderTab('COMPLETED')" id="tab-btn-COMPLETED" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
+                        <span>交易完成</span>
+                        <span id="tab-count-COMPLETED" class="bg-stone-200 text-stone-700 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+                </div>
+
+                <!-- 訂單清單表格 -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-stone-600">
+                        <thead class="bg-stone-100 text-stone-500 uppercase font-semibold border-b border-stone-200">
+                            <tr>
+                                <th class="p-3">訂單編號 / 下單時間</th>
+                                <th class="p-3">買家資料 / LINE</th>
+                                <th class="p-3">7-11 賣貨便門市</th>
+                                <th class="p-3">選購明細 (含現貨/預購)</th>
+                                <th class="p-3">結算金額</th>
+                                <th class="p-3">訂單狀態 (變更即自動推播)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-stone-100">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="orders-empty-state" class="py-12 text-center text-stone-400 hidden">
+                    <i class="ph ph-package text-4xl mb-2 text-stone-300"></i>
+                    <p class="text-xs">此分類下暫無訂單</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-stone-900 text-stone-400 text-xs py-7 mt-12 border-t border-stone-800">
+        <div class="max-w-[1500px] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <p class="text-stone-200 font-bold tracking-tight text-sm">Pika__Ann 海外代購選物</p>
+                <p class="text-[11px] text-stone-500 mt-1">選品策劃與系統：<span class="text-amber-300 font-medium">Ann</span> ｜ 運送配合：7-11 賣貨便 (滿 $1,500 免運)</p>
+            </div>
+
+            <div class="flex items-center space-x-3 text-xs">
+                <a id="footer-line-link" href="https://line.me/R/ti/p/@pika__ann" target="_blank" class="bg-line hover:bg-line-hover text-white px-3 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 transition">
+                    <i class="ph ph-chat-circle-dots text-base"></i>
+                    <span>LINE@ 官方客服</span>
+                </a>
+                <a href="https://threads.net/@pika__ann" target="_blank" class="bg-stone-800 hover:bg-stone-700 text-white px-3 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 border border-stone-700 transition">
+                    <i class="ph ph-at text-base"></i>
+                    <span>Threads 連線</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 購物車彈窗 -->
+    <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm transition-opacity" onclick="toggleCartModal(false)"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                <div class="p-4 border-b border-stone-200 flex items-center justify-between bg-stone-50">
+                    <div class="flex items-center space-x-2">
+                        <i class="ph ph-bag-simple text-xl text-amber-600"></i>
+                        <h2 class="text-sm font-bold text-stone-900 font-serif">Pika__Ann 購物清單</h2>
+                    </div>
+                    <button onclick="toggleCartModal(false)" class="p-1 rounded-lg text-stone-400 hover:text-stone-700">
+                        <i class="ph ph-x text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="bg-orange-50 px-4 py-2.5 border-b border-orange-100 text-xs">
+                    <div class="flex justify-between font-bold text-stone-800">
+                        <span>7-11 賣貨便免運門檻</span>
+                        <span id="cart-free-shipping-tip" class="text-orange-700">滿 NT$1,500 免運</span>
+                    </div>
+                    <div class="w-full bg-stone-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                        <div id="cart-free-shipping-progress" class="bg-orange-600 h-full w-0 transition-all"></div>
+                    </div>
+                </div>
+
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-3">
+                </div>
+
+                <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-2.5">
+                    <div class="flex justify-between text-xs text-stone-600">
+                        <span>商品小計</span>
+                        <span id="cart-subtotal" class="font-mono font-bold text-stone-900">$0</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-stone-600">
+                        <span>7-11 賣貨便運費</span>
+                        <span id="cart-shipping-fee" class="font-mono font-bold text-orange-700">NT$ 38</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-stone-900 border-t border-stone-200 pt-2">
+                        <span>應付總額</span>
+                        <span id="cart-total" class="font-mono text-base text-amber-700">$0</span>
+                    </div>
+
+                    <button id="checkout-start-btn" onclick="openCheckoutForm()" class="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5 mt-2">
+                        <i class="ph ph-check-circle text-sm"></i>
+                        <span>填寫門市委託單 (送入試算表與 LINE)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 結帳資料填寫彈窗 -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-xs">PA</div>
+                    <h3 class="text-base font-bold text-stone-900">填寫 7-11 賣貨便取件資料</h3>
+                </div>
+                <button onclick="toggleCheckoutModal(false)" class="text-stone-400 hover:text-stone-700">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="bg-orange-50 border border-orange-200 p-3 rounded-xl text-xs space-y-1 text-orange-950">
+                <div class="flex items-center space-x-1.5 font-bold text-orange-800">
+                    <i class="ph ph-truck text-base"></i>
+                    <span>7-11 賣貨便配送</span>
+                </div>
+                <p class="text-[11px] leading-relaxed">
+                    常態運費 <strong>NT$ 38</strong>，滿 <strong>NT$ 1,500 免運</strong>！包裹抵達門市將發送取件簡訊。
+                </p>
+            </div>
+
+            <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-stone-700 mb-1">買家真實姓名 *</label>
+                    <input type="text" id="cust-name" required placeholder="例如：林依晨 (取件核對證件)" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-stone-700 mb-1">手機號碼 *</label>
+                        <input type="tel" id="cust-phone" required placeholder="0912-345-678" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-stone-700 mb-1">買家 LINE ID *</label>
+                        <input type="text" id="cust-line" required placeholder="@line_id (方便客服聯繫)" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-line focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="font-bold text-stone-700">7-11 取件門市與店號 *</label>
+                        <a href="https://emap.pcsc.com.tw/mobilemap/Id/Default.aspx" target="_blank" class="text-orange-700 hover:underline flex items-center space-x-1 text-[11px]">
+                            <i class="ph ph-map-pin"></i>
+                            <span>查詢 7-11 門市店號</span>
+                        </a>
+                    </div>
+                    <input type="text" id="cust-store" required placeholder="例如：7-11 敦南門市 (店號: 123456)" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-stone-700 mb-1">代購需求備註 (選填)</label>
+                    <textarea id="cust-note" rows="2" placeholder="可填寫希望保留包裝、紙袋等細節..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 text-xs space-y-1">
+                    <div class="flex justify-between text-stone-600">
+                        <span>商品小計</span>
+                        <span id="modal-subtotal" class="font-mono font-bold">$0</span>
+                    </div>
+                    <div class="flex justify-between text-stone-600">
+                        <span>7-11 賣貨便運費</span>
+                        <span id="modal-shipping" class="font-mono font-bold text-orange-700">$38</span>
+                    </div>
+                    <div class="flex justify-between text-stone-900 font-bold border-t border-stone-200 pt-1 text-sm">
+                        <span>應付總額</span>
+                        <span id="modal-total" class="font-mono text-amber-700">$0</span>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="submit-btn" class="w-full bg-line hover:bg-line-hover text-white py-3 rounded-xl font-bold text-xs transition shadow-md flex items-center justify-center space-x-1.5">
+                        <i class="ph ph-paper-plane-tilt text-sm"></i>
+                        <span>確認送出委託 (同步試算表與 LINE 通知)</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 委託成功與引導回填彈窗 -->
+    <div id="order-success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <div class="w-12 h-12 bg-emerald-100 text-line rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i class="ph ph-check-bold"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-stone-900">代購委託已成功建立！</h3>
+                <p class="text-xs text-stone-500 mt-1">訂單編號：<span id="success-order-id" class="font-mono font-bold text-amber-800"></span></p>
+            </div>
+            <div class="bg-stone-50 border border-stone-200 rounded-xl p-3 text-xs text-stone-600 text-left space-y-1.5">
+                <p class="flex items-center space-x-1 text-emerald-700 font-semibold">
+                    <i class="ph ph-check-circle"></i>
+                    <span>已成功接收訂單</span>
+                </p>
+                <div class="border-t border-dashed border-stone-200 pt-1 mt-1 text-amber-900 font-medium">
+                    ✦ 請點擊下方按鈕加入 LINE@ 官方帳號，並將訂單編號傳送給機器人完成綁定！
+                </div>
+            </div>
+            <div class="space-y-2">
+                <a id="success-line-link" href="https://line.me/R/ti/p/@pika__ann" target="_blank" class="w-full bg-line hover:bg-line-hover text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition">
+                    <i class="ph ph-chat-circle-dots text-base"></i>
+                    <span>前往 LINE@ 回傳訂單編號</span>
+                </a>
+                <button onclick="closeSuccessModal()" class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-xl transition">
+                    關閉並繼續選購
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理者密碼驗證彈窗 -->
+    <div id="admin-auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center space-x-2 text-stone-900 font-bold">
+                <i class="ph ph-shield-check text-xl text-amber-600"></i>
+                <h3 class="text-sm">Ann 賣家後台登入認證</h3>
+            </div>
+            <p class="text-xs text-stone-500">請輸入管理密碼進入賣家專屬控制台：</p>
+            
+            <form onsubmit="handleAdminLogin(event)" class="space-y-3">
+                <input type="password" id="admin-password-input" placeholder="請輸入密碼" class="w-full border border-stone-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                <div class="flex space-x-2">
+                    <button type="button" onclick="closeAdminAuthModal()" class="w-1/2 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold">
+                        取消
+                    </button>
+                    <button type="submit" class="w-1/2 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold">
+                        進入後台
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+    <script>
+        // 商品資料
+        let productsDatabase = [
+            {
+                id: 'doll-01',
+                name: 'Chiikawa 吉伊卡哇 飛天小桃鼠 限量包包吊飾',
+                category: 'doll',
+                categoryName: '娃娃/吊飾',
+                type: 'instock',
+                price: 490,
+                originalPrice: 620,
+                stockText: '現貨 24H 快速寄出 (庫存 4 件)',
+                image: 'https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=500&q=80',
+                description: '日本正版帶回，附原裝珠鍊吊牌，超萌手感極細緻。'
+            },
+            {
+                id: 'doll-02',
+                name: 'Jellycat 英國經典巴薩諾小兔玩偶 18cm',
+                category: 'doll',
+                categoryName: '娃娃/吊飾',
+                type: 'preorder',
+                price: 1350,
+                originalPrice: 1680,
+                stockText: '海外預購｜預計 7-10 工作天抵台',
+                image: 'https://images.unsplash.com/photo-1582234372722-50d7ccc30ebd?auto=format&fit=crop&w=500&q=80',
+                description: '頂級親膚防過敏絨毛，附藍色防塵袋與專屬正品卡片。'
+            },
+            {
+                id: 'key-01',
+                name: 'Human Made 經典北極熊壓克力多功能鑰匙圈',
+                category: 'keychain',
+                categoryName: '鑰匙圈',
+                type: 'instock',
+                price: 890,
+                originalPrice: 1100,
+                stockText: '現貨 24H 快速寄出 (庫存 6 件)',
+                image: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=500&q=80',
+                description: '日本原宿直營店採購，加厚壓克力搭配防銹合金扣環。'
+            },
+            {
+                id: 'key-02',
+                name: 'Maison Margiela 數字刻印純黃銅復古鑰匙圈',
+                category: 'keychain',
+                categoryName: '鑰匙圈',
+                type: 'preorder',
+                price: 3600,
+                originalPrice: 4200,
+                stockText: '海外預購｜ 10-14 天抵台',
+                image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=500&q=80',
+                description: '經典 11 號標籤刻印，低調奢華做舊工藝，附原廠白色禮盒。'
+            },
+            {
+                id: 'dec-01',
+                name: '北歐極簡手作流動漸層波浪玻璃花瓶 (焦糖色)',
+                category: 'decor',
+                categoryName: '裝飾品',
+                type: 'instock',
+                price: 920,
+                originalPrice: 1280,
+                stockText: '現貨 24H 快速寄出 (庫存 3 件)',
+                image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=500&q=80',
+                description: '丹麥手工吹製質感，光線折射極美，擺設或插花皆顯格調。'
+            },
+            {
+                id: 'home-01',
+                name: 'Hotel Magique 刺繡巴黎標語有機純棉抱枕套 (45x45cm)',
+                category: 'home',
+                categoryName: '居家用品',
+                type: 'instock',
+                price: 1180,
+                originalPrice: 1450,
+                stockText: '現貨 24H 快速寄出 (庫存 5 件)',
+                image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=500&q=80',
+                description: '法國文藝氛圍，高密度厚磅純棉手感，為客廳沙發注入法式慵懶。'
+            }
+        ];
+
+        const SHIPPING_FEE_STANDARD = 38;
+        const FREE_SHIPPING_THRESHOLD = 1500;
+        const MY_LINE_OA_ID = '@730clyju'; // 👈 請在這裡換成你真實的 LINE@ ID（必須包含 @ 符號，例如 '@123abcd'）
+
+        let activeCategory = 'doll';
+        let cart = [];
+        let orders = [];
+        let currentOrderTab = 'ALL';
+        let isAdminLoggedIn = false;
+        let adminClickTimer = null;
+        let adminClickCount = 0;
+        let googleSheetUrl = '';
+
+        const ORDER_STATUS_MAP = {
+            'NEW': { label: '新進訂單 (待確認)', color: 'bg-amber-100 text-amber-800' },
+            'PURCHASING': { label: '海外採購中', color: 'bg-blue-100 text-blue-800' },
+            'FLIGHT': { label: '抵台檢驗中', color: 'bg-purple-100 text-purple-800' },
+            'SHIPPED': { label: '已出貨', color: 'bg-emerald-100 text-emerald-800' },
+            'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
+        };
+
+        // 後台解鎖
+        function handleSecretAdminClick() {
+            adminClickCount++;
+            clearTimeout(adminClickTimer);
+            adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 600);
+            if (adminClickCount >= 3) {
+                adminClickCount = 0;
+                document.getElementById('admin-auth-modal').classList.remove('hidden');
+            }
+        }
+
+        function closeAdminAuthModal() {
+            document.getElementById('admin-auth-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('admin-password-input').value.trim();
+            if (pwd === '830205') {
+                isAdminLoggedIn = true;
+                closeAdminAuthModal();
+                document.getElementById('admin-nav-group').classList.remove('hidden');
+                switchTab('admin');
+                showToast('🔑 歡迎 Ann！已成功進入賣家後台！');
+                refreshOrdersFromSheet();
+            } else {
+                showToast('❌ 密碼錯誤！');
+            }
+        }
+
+        function lockAdminMode() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-nav-group').classList.add('hidden');
+            switchTab('store');
+            showToast('🔒 已安全登出賣家後台。');
+        }
+
+        function switchTab(tab) {
+            const vStore = document.getElementById('view-store');
+            const vSheet = document.getElementById('view-sheet');
+            const vAdmin = document.getElementById('view-admin');
+            const bStore = document.getElementById('nav-btn-store');
+            const bSheet = document.getElementById('nav-btn-sheet');
+            const bAdmin = document.getElementById('nav-btn-admin');
+
+            [vStore, vSheet, vAdmin].forEach(el => el.classList.add('hidden'));
+            [bStore, bSheet, bAdmin].forEach(btn => {
+                if (btn) btn.className = "px-3 py-1 rounded-lg text-xs font-semibold text-stone-600 hover:text-stone-900";
+            });
+
+            if (tab === 'store') {
+                vStore.classList.remove('hidden');
+                if (bStore) bStore.className = "px-3 py-1 rounded-lg text-xs font-semibold bg-white text-stone-900 shadow-sm";
+            } else if (tab === 'sheet') {
+                vSheet.classList.remove('hidden');
+                if (bSheet) bSheet.className = "px-3 py-1 rounded-lg text-xs font-semibold bg-white text-stone-900 shadow-sm";
+            } else {
+                vAdmin.classList.remove('hidden');
+                if (bAdmin) bAdmin.className = "px-3 py-1 rounded-lg text-xs font-semibold bg-white text-stone-900 shadow-sm";
+                renderOrdersTable();
+                updateStats();
+            }
+        }
+
+        // 商品顯示
+        function selectCategory(catKey) {
+            activeCategory = catKey;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.className = "cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200";
+            });
+            const activeBtn = document.getElementById(`cat-btn-${catKey}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-amber-500 text-white shadow-sm shadow-amber-200";
+            }
+            renderProducts();
+        }
+
+        function updateCategoryBadges() {
+            const counts = { doll: 0, keychain: 0, decor: 0, home: 0 };
+            productsDatabase.forEach(p => {
+                if (counts[p.category] !== undefined) counts[p.category]++;
+            });
+            document.getElementById('badge-count-doll').innerText = counts.doll;
+            document.getElementById('badge-count-keychain').innerText = counts.keychain;
+            document.getElementById('badge-count-decor').innerText = counts.decor;
+            document.getElementById('badge-count-home').innerText = counts.home;
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const searchVal = document.getElementById('product-search').value.toLowerCase().trim();
+            const typeFilter = document.getElementById('type-filter').value;
+            grid.innerHTML = '';
+
+            const filtered = productsDatabase.filter(item => {
+                const matchCat = item.category === activeCategory;
+                const matchType = (typeFilter === 'all') || (item.type === typeFilter);
+                const matchSearch = item.name.toLowerCase().includes(searchVal) || item.description.toLowerCase().includes(searchVal);
+                return matchCat && matchType && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-stone-400 bg-white rounded-2xl border border-dashed border-stone-300">
+                        <i class="ph ph-magnifying-glass text-3xl mb-1 text-stone-300"></i>
+                        <p class="text-xs">此條件下暫無商品</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const isPreorder = p.type === 'preorder';
+                const card = document.createElement('div');
+                card.className = "group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col";
+                card.innerHTML = `
+                    <div class="relative w-full aspect-square overflow-hidden bg-stone-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                        <div class="absolute top-2 left-2">
+                            ${isPreorder 
+                                ? `<span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
+                                     <i class="ph ph-airplane-tilt"></i><span>海外預購</span>
+                                   </span>`
+                                : `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 badge-pulse">
+                                     <i class="ph ph-lightning"></i><span>現貨</span>
+                                   </span>`
+                            }
+                        </div>
+                    </div>
+                    <div class="p-2.5 flex-1 flex flex-col justify-between space-y-2">
+                        <div>
+                            <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-tight group-hover:text-amber-700 transition" title="${p.name}">
+                                ${p.name}
+                            </h3>
+                            <p class="text-[10px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
+                            <p class="text-[10px] font-semibold mt-1.5 ${isPreorder ? 'text-amber-700' : 'text-emerald-700'}">${p.stockText}</p>
+                        </div>
+                        <div class="pt-2 border-t border-stone-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-stone-400 line-through">NT$${p.originalPrice}</span>
+                                <div class="text-xs sm:text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</div>
+                            </div>
+                            <button onclick="addToCart('${p.id}')" class="bg-stone-900 hover:bg-amber-600 text-white p-2 rounded-lg transition active:scale-95 shadow-sm">
+                                <i class="ph ph-plus-bold text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 購物車
+        function addToCart(productId) {
+            const product = productsDatabase.find(p => p.id === productId);
+            if (!product) return;
+            const existing = cart.find(i => i.product.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+            updateCartUI();
+            showToast(`已加入「${product.name.slice(0, 10)}...」`);
+        }
+
+        function updateCartQty(productId, delta) {
+            const item = cart.find(i => i.product.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.product.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function calculateCartFinance() {
+            const subtotal = cart.reduce((acc, i) => acc + (i.product.price * i.quantity), 0);
+            const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+            const shippingFee = (cart.length === 0 || isFreeShipping) ? 0 : SHIPPING_FEE_STANDARD;
+            const total = subtotal + shippingFee;
+            const diff = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+            const percent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+            return { subtotal, isFreeShipping, shippingFee, total, diff, percent };
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.reduce((acc, c) => acc + c.quantity, 0);
+            const finance = calculateCartFinance();
+
+            const freeBar = document.getElementById('free-shipping-bar');
+            const freeTag = document.getElementById('free-shipping-tag');
+            if (finance.isFreeShipping && finance.subtotal > 0) {
+                freeBar.style.width = '100%';
+                freeTag.innerText = '🎉 已達標！享賣貨便免運';
+                freeTag.className = 'font-bold text-emerald-300';
+            } else {
+                freeBar.style.width = `${finance.percent}%`;
+                freeTag.innerText = `還差 $${finance.diff}`;
+                freeTag.className = 'font-bold text-amber-200';
+            }
+
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const shippingEl = document.getElementById('cart-shipping-fee');
+            const totalEl = document.getElementById('cart-total');
+            const cartBar = document.getElementById('cart-free-shipping-progress');
+            const cartTip = document.getElementById('cart-free-shipping-tip');
+
+            if (finance.isFreeShipping && finance.subtotal > 0) {
+                cartBar.style.width = '100%';
+                cartTip.innerText = '🎉 已達標！享 7-11 賣貨便免運！';
+                cartTip.className = 'text-emerald-600 font-bold';
+                shippingEl.innerHTML = '<span class="text-emerald-600 font-bold">NT$ 0 (免運)</span>';
+            } else {
+                cartBar.style.width = `${finance.percent}%`;
+                cartTip.innerText = `還差 NT$ ${finance.diff} 享賣貨便免運`;
+                cartTip.className = 'text-orange-700 font-bold';
+                shippingEl.innerText = `NT$ ${SHIPPING_FEE_STANDARD}`;
+            }
+
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-56 flex flex-col items-center justify-center text-stone-400 text-center space-y-2">
+                        <i class="ph ph-shopping-bag text-4xl text-stone-300"></i>
+                        <p class="text-xs">購物清單是空的</p>
+                    </div>
+                `;
+                subtotalEl.innerText = '$0';
+                totalEl.innerText = '$0';
+                document.getElementById('checkout-start-btn').disabled = true;
+                document.getElementById('checkout-start-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            document.getElementById('checkout-start-btn').disabled = false;
+            document.getElementById('checkout-start-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+
+            cart.forEach(i => {
+                const div = document.createElement('div');
+                div.className = "flex space-x-2.5 p-2.5 bg-stone-50 rounded-xl border border-stone-200 items-center text-xs";
+                div.innerHTML = `
+                    <img src="${i.product.image}" class="w-14 h-14 object-cover rounded-lg border border-stone-200 flex-shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[9px] px-1 py-0.2 rounded font-bold ${i.product.type === 'preorder' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+                            ${i.product.type === 'preorder' ? '預購' : '現貨'}
+                        </span>
+                        <h4 class="text-xs font-bold text-stone-900 truncate mt-0.5">${i.product.name}</h4>
+                        <div class="text-[11px] font-mono font-bold text-stone-800 mt-0.5">NT$${i.product.price}</div>
+                        <div class="flex items-center space-x-1.5 mt-1.5">
+                            <button onclick="updateCartQty('${i.product.id}', -1)" class="w-5 h-5 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">-</button>
+                            <span class="text-xs font-mono font-bold px-1">${i.quantity}</span>
+                            <button onclick="updateCartQty('${i.product.id}', 1)" class="w-5 h-5 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">+</button>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs font-bold font-mono text-stone-900">NT$${(i.product.price * i.quantity).toLocaleString()}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            subtotalEl.innerText = `NT$ ${finance.subtotal.toLocaleString()}`;
+            totalEl.innerText = `NT$ ${finance.total.toLocaleString()}`;
+        }
+
+        function openCheckoutForm() {
+            if (cart.length === 0) return;
+            const finance = calculateCartFinance();
+            document.getElementById('modal-subtotal').innerText = `NT$ ${finance.subtotal.toLocaleString()}`;
+            document.getElementById('modal-shipping').innerText = finance.shippingFee === 0 ? 'NT$ 0 (免運)' : `NT$ ${finance.shippingFee}`;
+            document.getElementById('modal-total').innerText = `NT$ ${finance.total.toLocaleString()}`;
+            toggleCartModal(false);
+            toggleCheckoutModal(true);
+        }
+
+        // ==================== 下單傳送 (透過 no-cors 穩定存入試算表) ====================
+        async function submitOrder(e) {
+            e.preventDefault();
+
+            // 防呆檢查：確認是否已設定 Apps Script 網址 (改用 Toast 避免被阻擋)
+            if (!googleSheetUrl || !googleSheetUrl.includes('/exec')) {
+                showToast("⚠️ 尚未設定 Apps Script /exec 網址！請先至後台「試算表端點設定」貼上並儲存。");
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-sm"></i><span>正在存入試算表與發送 LINE 通知...</span>`;
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const lineId = document.getElementById('cust-line').value.trim();
+            const store = document.getElementById('cust-store').value.trim();
+            const note = document.getElementById('cust-note').value.trim();
+
+            try {
+                localStorage.setItem('pa_buyer_info', JSON.stringify({ name, phone, lineId, store }));
+            } catch (err) {}
+
+            const finance = calculateCartFinance();
+            const orderId = 'PA-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + Math.floor(1000 + Math.random() * 9000);
+            const nowString = new Date().toLocaleString('zh-TW', { hour12: false });
+
+            const itemsSummary = cart.map(i => `${i.product.name} (x${i.quantity}) [${i.product.type === 'preorder' ? '預購' : '現貨'}]`).join('；');
+            const categories = Array.from(new Set(cart.map(i => i.product.categoryName))).join(', ');
+            const types = Array.from(new Set(cart.map(i => i.product.type === 'preorder' ? '海外預購' : '現貨'))).join(', ');
+
+            // 整理供後端試算表「商品庫存」精確扣減的明細陣列
+            const cartItemsPayload = cart.map(i => ({
+                id: i.product.id,
+                name: i.product.name,
+                type: i.product.type,
+                qty: i.quantity
+            }));
+
+            const newOrder = {
+                orderId: orderId,
+                orderDate: nowString,
+                customerName: name,
+                phone: phone,
+                lineId: lineId,
+                storeName: store,
+                itemsSummary: itemsSummary,
+                cartItems: cartItemsPayload,
+                categories: categories,
+                types: types,
+                subtotal: finance.subtotal,
+                shippingFee: finance.shippingFee,
+                totalAmount: finance.total,
+                note: note,
+                status: 'NEW'
+            };
+
+            // 正式透過 text/plain POST 發送至 Apps Script
+            try {
+                await fetch(googleSheetUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(newOrder)
+                });
+                console.log("✅ 訂單已發送至 Apps Script 端點:", newOrder);
+            } catch (netErr) {
+                console.error("發送訂單網路異常:", netErr);
+            }
+
+            // 前端畫面庫存即時同步扣減
+            cart.forEach(item => {
+                const targetProd = productsDatabase.find(p => p.id === item.product.id);
+                if (targetProd && targetProd.type === 'instock' && targetProd.stockText) {
+                    const numMatch = targetProd.stockText.match(/(\d+)\s*件/) || targetProd.stockText.match(/庫存\s*(\d+)/);
+                    if (numMatch) {
+                        const cur = parseInt(numMatch[1], 10);
+                        const next = Math.max(0, cur - item.quantity);
+                        targetProd.stockText = next === 0
+                            ? "⚡ 已售完 (庫存 0 件)"
+                            : targetProd.stockText.replace(numMatch[0], numMatch[0].replace(numMatch[1], String(next)));
+                    }
+                }
+            });
+
+            orders.unshift(newOrder);
+            cart = [];
+            updateCartUI();
+            renderProducts();
+            toggleCheckoutModal(false);
+            renderOrdersTable();
+            updateStats();
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="ph ph-paper-plane-tilt text-sm"></i><span>確認送出委託 (同步試算表與 LINE 通知)</span>`;
+
+            document.getElementById('success-order-id').innerText = orderId;
+            // 使用 LINE 官方 oaMessage 協議，開啟聊天室即自動在輸入框帶入訂單編號
+            document.getElementById('success-line-link').href = `https://line.me/R/oaMessage/${encodeURIComponent(MY_LINE_OA_ID)}/?${encodeURIComponent(orderId)}`;
+            document.getElementById('order-success-modal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('order-success-modal').classList.add('hidden');
+        }
+
+        // ==================== 後台訂單狀態分頁 (Tabs) 邏輯 ====================
+        function setOrderTab(statusKey) {
+            currentOrderTab = statusKey;
+
+            // 切換按鈕外觀
+            document.querySelectorAll('.order-tab-btn').forEach(btn => {
+                btn.className = "order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition";
+            });
+            const activeBtn = document.getElementById(`tab-btn-${statusKey}`);
+            if (activeBtn) {
+                activeBtn.className = "order-tab-btn py-2.5 px-3 border-b-2 border-stone-900 text-stone-900 flex items-center space-x-1.5 transition";
+            }
+
+            renderOrdersTable();
+        }
+
+        function renderOrdersTable() {
+            const tbody = document.getElementById('orders-table-body');
+            const empty = document.getElementById('orders-empty-state');
+            tbody.innerHTML = '';
+
+            const filteredOrders = orders.filter(o => {
+                if (currentOrderTab === 'ALL') return true;
+                return o.status === currentOrderTab;
+            });
+
+            if (filteredOrders.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            filteredOrders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stone-50 border-b border-stone-100 text-xs";
+                tr.innerHTML = `
+                    <td class="p-3 align-top font-mono">
+                        <div class="font-bold text-stone-900">${order.orderId}</div>
+                        <div class="text-[10px] text-stone-400 mt-0.5">${order.orderDate}</div>
+                    </td>
+                    <td class="p-3 align-top">
+                        <div class="font-bold text-stone-800">${order.customerName}</div>
+                        <div class="text-stone-500 text-[11px]">${order.phone}</div>
+                        <div class="inline-flex items-center space-x-1 text-line bg-emerald-50 px-1.5 py-0.2 rounded mt-0.5 text-[10px] font-mono">
+                            <i class="ph ph-chat-circle-dots"></i>
+                            <span>${order.lineId}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 align-top">
+                        <div class="font-semibold text-stone-900 flex items-center space-x-1">
+                            <i class="ph ph-storefront text-orange-600"></i>
+                            <span>${order.storeName}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 align-top max-w-xs">
+                        <div class="text-stone-700 text-[11px] leading-tight">${order.itemsSummary}</div>
+                        ${order.note ? `<div class="text-[10px] text-amber-800 bg-amber-50 p-1 rounded mt-1">備註: ${order.note}</div>` : ''}
+                    </td>
+                    <td class="p-3 align-top font-mono">
+                        <div class="text-stone-500 text-[10px]">小計: $${order.subtotal}</div>
+                        <div class="text-orange-700 text-[10px]">賣貨便: $${order.shippingFee}</div>
+                        <div class="text-xs font-bold text-stone-900">總額: NT$ ${order.totalAmount.toLocaleString()}</div>
+                    </td>
+                    <td class="p-3 align-top">
+                        <select onchange="changeOrderStatus('${order.orderId}', this.value)" class="text-xs font-semibold rounded-lg border border-stone-300 bg-white p-1.5 focus:ring-2 focus:ring-line focus:outline-none cursor-pointer">
+                            <option value="NEW" ${order.status === 'NEW' ? 'selected' : ''}>新進訂單 (待確認)</option>
+                            <option value="PURCHASING" ${order.status === 'PURCHASING' ? 'selected' : ''}>Ann 海外採購中</option>
+                            <option value="FLIGHT" ${order.status === 'FLIGHT' ? 'selected' : ''}>國際空運抵台檢驗中</option>
+                            <option value="SHIPPED" ${order.status === 'SHIPPED' ? 'selected' : ''}>已出貨至 7-11 賣貨便</option>
+                            <option value="COMPLETED" ${order.status === 'COMPLETED' ? 'selected' : ''}>買家已簽收 (完成交易)</option>
+                        </select>
+                        <div class="mt-1 text-[10px] text-stone-400 flex items-center space-x-1">
+                            <i class="ph ph-bell-ringing text-line"></i>
+                            <span>狀態變更自動 LINE 買家</span>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function changeOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.orderId === orderId);
+            if (!order) return;
+
+            order.status = newStatus;
+            updateStats();
+            renderOrdersTable();
+            showToast(`已更新 ${orderId} 為「${ORDER_STATUS_MAP[newStatus].label}」！`);
+
+            if (googleSheetUrl) {
+                try {
+                    await fetch(googleSheetUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'updateStatus',
+                            orderId: order.orderId,
+                            newStatus: newStatus,
+                            newStatusLabel: ORDER_STATUS_MAP[newStatus].label,
+                            customerName: order.customerName,
+                            storeName: order.storeName
+                        })
+                    });
+                } catch (e) {
+                    console.error("狀態同步失敗:", e);
+                }
+            }
+        }
+
+        function updateStats() {
+            const counts = {
+                ALL: orders.length,
+                NEW: 0,
+                PURCHASING: 0,
+                FLIGHT: 0,
+                SHIPPED: 0,
+                COMPLETED: 0
+            };
+
+            orders.forEach(o => {
+                if (counts[o.status] !== undefined) {
+                    counts[o.status]++;
+                }
+            });
+
+            document.getElementById('tab-count-ALL').innerText = counts.ALL;
+            document.getElementById('tab-count-NEW').innerText = counts.NEW;
+            document.getElementById('tab-count-PURCHASING').innerText = counts.PURCHASING;
+            document.getElementById('tab-count-FLIGHT').innerText = counts.FLIGHT;
+            document.getElementById('tab-count-SHIPPED').innerText = counts.SHIPPED;
+            document.getElementById('tab-count-COMPLETED').innerText = counts.COMPLETED;
+
+            document.getElementById('stat-total-orders').innerText = orders.length;
+            const pending = orders.filter(o => o.status !== 'COMPLETED').length;
+            document.getElementById('stat-pending-orders').innerText = pending;
+            document.getElementById('admin-badge').innerText = pending;
+
+            const freeShips = orders.filter(o => o.shippingFee === 0).length;
+            document.getElementById('stat-free-ship-orders').innerText = freeShips;
+
+            const rev = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+            document.getElementById('stat-total-revenue').innerText = '$' + rev.toLocaleString();
+        }
+
+        // 從試算表重新同步訂單
+        async function refreshOrdersFromSheet() {
+            if (!googleSheetUrl) {
+                showToast("請先設定試算表網址！");
+                return;
+            }
+            showToast("⏳ 正在從試算表讀取所有訂單...");
+            try {
+                const res = await fetch(`${googleSheetUrl}?action=getOrders`);
+                const result = await res.json();
+                if (result.status === "success" && Array.isArray(result.orders)) {
+                    orders = result.orders;
+                    updateStats();
+                    renderOrdersTable();
+                    showToast(`✅ 成功載入 ${orders.length} 筆訂單！`);
+                }
+            } catch (err) {
+                console.error("讀取訂單異常:", err);
+                showToast("⚠️ 讀取失敗，請確認部署權限為所有人 (Anyone)");
+            }
+        }
+
+        // 後台端點設定
+        function saveAdminSettings() {
+            const urlInput = document.getElementById('sheet-app-url');
+            googleSheetUrl = urlInput.value.trim();
+            localStorage.setItem('pa_sheet_url', googleSheetUrl);
+            showToast('✅ Web App 網址配置已儲存！');
+            syncProductsFromSheet();
+        }
+
+        // 從試算表「商品庫存」分頁同步最新商品與庫存數量
+        async function syncProductsFromSheet() {
+            if (!googleSheetUrl || !googleSheetUrl.includes('/exec')) return;
+            try {
+                const syncUrl = googleSheetUrl + (googleSheetUrl.includes('?') ? '&' : '?') + 'action=getProducts';
+                const res = await fetch(syncUrl, { method: 'GET', redirect: 'follow' });
+                const data = await res.json();
+                if (data && data.status === 'success' && Array.isArray(data.products) && data.products.length > 0) {
+                    productsDatabase = data.products;
+                    updateCategoryBadges();
+                    renderProducts();
+                    console.log(`✅ 已從試算表同步 ${productsDatabase.length} 項商品庫存`);
+                }
+            } catch (err) {
+                console.warn("⚠️ 無法自動同步商品庫存，目前維持預設清單:", err);
+            }
+        }
+
+        async function testConnectionToSheet() {
+            const url = document.getElementById('sheet-app-url').value.trim();
+            const resultBox = document.getElementById('conn-result-box');
+            const testBtn = document.getElementById('test-conn-btn');
+
+            if (!url) {
+                resultBox.className = "p-4 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-xs space-y-1";
+                resultBox.innerHTML = `<div class="font-bold flex items-center space-x-1"><i class="ph ph-warning-circle text-base"></i><span>請先輸入 Apps Script 網址！</span></div><p>請貼上結尾為 <code>/exec</code> 的網頁應用程式網址後再點擊測試。</p>`;
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            if (!url.includes('/exec')) {
+                resultBox.className = "p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 text-xs space-y-1";
+                resultBox.innerHTML = `<div class="font-bold flex items-center space-x-1"><i class="ph ph-x-circle text-base"></i><span>網址格式不正確</span></div><p>您的網址未包含 <code>/exec</code>（請勿使用測試用的 <code>/dev</code> 網址）。</p>`;
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            testBtn.disabled = true;
+            testBtn.innerHTML = `<i class="ph ph-spinner animate-spin"></i><span>連線測試中...</span>`;
+            resultBox.className = "p-4 rounded-xl border border-stone-200 bg-stone-50 text-stone-700 text-xs";
+            resultBox.innerHTML = `<div class="flex items-center space-x-2"><i class="ph ph-spinner animate-spin text-base"></i><span>正在向 Google Apps Script 端點發送測試請求...</span></div>`;
+            resultBox.classList.remove('hidden');
+
+            try {
+                // 帶上測試參數進行 GET 驗證
+                const testUrl = url + (url.includes('?') ? '&' : '?') + 'action=ping';
+                const res = await fetch(testUrl, { method: 'GET', redirect: 'follow' });
+                const text = await res.text();
+                
+                let data = null;
+                try { data = JSON.parse(text); } catch (parseErr) {}
+
+                if (data && data.status === "online") {
+                    resultBox.className = "p-4 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-950 text-xs space-y-1";
+                    resultBox.innerHTML = `
+                        <div class="font-bold text-emerald-800 flex items-center space-x-1.5 text-sm">
+                            <i class="ph ph-check-circle text-lg text-emerald-600"></i>
+                            <span>🎉 端點連線成功！(品牌：${data.brand || 'Pika__Ann'})</span>
+                        </div>
+                        <p class="text-emerald-800">Google Apps Script 後端已正常在線運作，請記得點擊右下角「儲存端點配置」。</p>
+                    `;
+                    showToast("🎉 端點連線測試成功！");
+                } else {
+                    // 若未更新最新 Code.gs 導致回傳 HTML 網頁而非 JSON
+                    resultBox.className = "p-4 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-950 text-xs space-y-1";
+                    resultBox.innerHTML = `
+                        <div class="font-bold text-emerald-800 flex items-center space-x-1.5 text-sm">
+                            <i class="ph ph-check-circle text-lg text-emerald-600"></i>
+                            <span>✅ 端點伺服器有回應！(HTTP ${res.status})</span>
+                        </div>
+                        <p class="text-emerald-800">網址可正常連通！請記得點擊右下角「儲存端點配置」，即可開始測試前台下單。</p>
+                    `;
+                    showToast("✅ 端點連線正常！");
+                }
+            } catch (e) {
+                resultBox.className = "p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-950 text-xs space-y-1.5";
+                resultBox.innerHTML = `
+                    <div class="font-bold text-rose-800 flex items-center space-x-1.5 text-sm">
+                        <i class="ph ph-warning-octagon text-lg text-rose-600"></i>
+                        <span>❌ 連線受阻或權限未開放</span>
+                    </div>
+                    <p>瀏覽器無法讀取該網址回應，請檢查以下兩點：</p>
+                    <ul class="list-disc pl-4 space-y-0.5 text-rose-900">
+                        <li>Apps Script 部署時，「誰可以存取」是否已設為 <strong>「所有人 (Anyone)」</strong>？</li>
+                        <li>是否已將修改後的 <code>Code.gs</code> 建立<strong>「新版本 (New version)」</strong>重新部署？</li>
+                    </ul>
+                    <div class="text-[10px] font-mono bg-white/80 p-1.5 rounded text-rose-700">錯誤細節：${e.toString()}</div>
+                `;
+                showToast("❌ 端點連線測試失敗");
+            } finally {
+                testBtn.disabled = false;
+                testBtn.innerHTML = `<i class="ph ph-plugs-connected"></i><span>測試端點連線狀態</span>`;
+            }
+        }
+
+        function toggleCartModal(open) {
+            document.getElementById('cart-modal').classList.toggle('hidden', !open);
+        }
+
+        function toggleCheckoutModal(open) {
+            document.getElementById('checkout-modal').classList.toggle('hidden', !open);
+        }
+
+        function showToast(text) {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = "pointer-events-auto bg-stone-900/90 backdrop-blur-md text-white text-xs px-3.5 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 border border-stone-700";
+            t.innerHTML = `<i class="ph ph-bell text-amber-400 text-sm"></i><span>${text}</span>`;
+            container.appendChild(t);
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateY(-10px)';
+                t.style.transition = 'all 0.3s ease';
+                setTimeout(() => t.remove(), 300);
+            }, 3200);
+        }
+
+        window.onload = function () {
+            // 自動同步全站 LINE@ 官方帳號連結
+            const baseLineUrl = `https://line.me/R/ti/p/${MY_LINE_OA_ID}`;
+            ['top-line-link', 'nav-line-link', 'footer-line-link'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = baseLineUrl;
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === '1' || urlParams.get('ann') === '1') {
+                isAdminLoggedIn = true;
+                document.getElementById('admin-nav-group').classList.remove('hidden');
+            }
+
+            const cachedSheetUrl = localStorage.getItem('pa_sheet_url');
+            if (cachedSheetUrl) {
+                googleSheetUrl = cachedSheetUrl;
+                const input = document.getElementById('sheet-app-url');
+                if (input) input.value = cachedSheetUrl;
+            }
+
+            try {
+                const savedBuyer = JSON.parse(localStorage.getItem('pa_buyer_info') || '{}');
+                if (savedBuyer.name) document.getElementById('cust-name').value = savedBuyer.name;
+                if (savedBuyer.phone) document.getElementById('cust-phone').value = savedBuyer.phone;
+                if (savedBuyer.lineId) document.getElementById('cust-line').value = savedBuyer.lineId;
+                if (savedBuyer.store) document.getElementById('cust-store').value = savedBuyer.store;
+            } catch (e) {}
+
+            selectCategory('doll');
+            updateCategoryBadges();
+            updateCartUI();
+            syncProductsFromSheet();
+        };
+    </script>
+</body>
+</html>
