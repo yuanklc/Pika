@@ -33,6 +33,10 @@
         }
     </script>
     <style>
+        /* 全站基準字級放大 +2pt (16px + 2.67px ≈ 18.67px)，讓所有文字更清晰好讀 */
+        html {
+            font-size: 18.67px;
+        }
         .glass-panel {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
@@ -52,7 +56,7 @@
 </head>
 <body class="bg-stone-100/70 text-stone-900 font-sans min-h-screen flex flex-col selection:bg-amber-100">
 
-    <!-- 頂端公告欄 (整合 Line@、Threads、賣貨便免運門檻) -->
+    <!-- 頂端公告欄 -->
     <div class="bg-stone-900 text-stone-200 text-xs py-1.5 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 tracking-wide">
         <div class="flex items-center space-x-2">
             <span class="inline-block w-2 h-2 rounded-full bg-line animate-ping"></span>
@@ -72,7 +76,7 @@
         </div>
     </div>
 
-    <!-- 導航列 (買家純淨前台視角，連點 LOGO 3 下解鎖後台) -->
+    <!-- 導航列 -->
     <header class="sticky top-0 z-40 glass-panel border-b border-stone-200 shadow-sm">
         <div class="max-w-[1500px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between">
             <!-- 品牌 LOGO (連點 3 下解鎖 Ann 賣家後台) -->
@@ -89,7 +93,7 @@
                 </div>
             </div>
 
-            <!-- 賣家後台按鈕組（解鎖後呈現） -->
+            <!-- 賣家後台按鈕組 -->
             <div id="admin-nav-group" class="hidden flex items-center bg-stone-200/80 p-1 rounded-xl border border-amber-300">
                 <button id="nav-btn-store" onclick="switchTab('store')" class="px-3 py-1 rounded-lg text-xs font-semibold bg-white text-stone-900 shadow-sm">
                     選品前台
@@ -134,7 +138,7 @@
                         <span>7-11 賣貨便常態配合 ✦ 滿 NT$1,500 免運 (未達運費 $38)</span>
                     </div>
                     <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
-                    <p class="text-xs text-orange-100">商品空運抵台後，將透過 LINE@ 傳送「7-11 賣貨便下單連結」通知取件！</p>
+                    <p class="text-xs text-orange-100">點擊任意商品卡片即可加入購物車，商品抵台後將透過 LINE@ 傳送賣貨便下單連結！</p>
                 </div>
 
                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 w-full md:w-80 text-xs space-y-1.5">
@@ -148,7 +152,7 @@
                 </div>
             </div>
 
-            <!-- 四大獨立類別按鈕 (無全部選品標籤，分開選購) -->
+            <!-- 四大獨立類別按鈕 -->
             <div class="bg-white p-3.5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                     <div class="flex items-center flex-wrap gap-2">
@@ -156,9 +160,9 @@
                             <i class="ph ph-tag mr-1"></i>商品分類:
                         </span>
                         
-                        <button onclick="selectCategory('doll')" id="cat-btn-doll" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
+                        <button onclick="selectCategory('doll')" id="cat-btn-doll" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-amber-500 text-white shadow-sm shadow-amber-200">
                             <span>🧸 娃娃 / 吊飾</span>
-                            <span id="badge-count-doll" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
+                            <span id="badge-count-doll" class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full">0</span>
                         </button>
 
                         <button onclick="selectCategory('keychain')" id="cat-btn-keychain" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
@@ -171,9 +175,9 @@
                             <span id="badge-count-decor" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
                         </button>
 
-                        <button onclick="selectCategory('home')" id="cat-btn-home" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-amber-500 text-white shadow-sm shadow-amber-200">
+                        <button onclick="selectCategory('home')" id="cat-btn-home" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-stone-100 text-stone-700 hover:bg-stone-200">
                             <span>🏠 居家用品</span>
-                            <span id="badge-count-home" class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full">0</span>
+                            <span id="badge-count-home" class="text-[10px] bg-stone-300 text-stone-800 px-1.5 py-0.2 rounded-full">0</span>
                         </button>
                     </div>
 
@@ -184,15 +188,15 @@
                             <option value="preorder">✈️ 僅看預購</option>
                         </select>
 
-                        <div class="relative w-40 sm:w-52">
-                            <i class="ph ph-magnifying-glass absolute left-3 top-2 text-stone-400"></i>
+                        <div class="relative w-44 sm:w-56">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-stone-400"></i>
                             <input type="text" id="product-search" oninput="renderProducts()" placeholder="搜尋選品名稱..." class="w-full bg-stone-50 border border-stone-200 rounded-xl pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800">
                         </div>
                     </div>
                 </div>
 
                 <div class="pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
-                    <span id="current-category-desc">正在檢視：<strong>居家用品</strong></span>
+                    <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong>（點擊商品卡片即可加入購物車）</span>
                     <span class="text-emerald-700 font-medium flex items-center space-x-1">
                         <i class="ph ph-check-circle"></i>
                         <span>已連線 Ann 選品庫存</span>
@@ -200,7 +204,7 @@
                 </div>
             </div>
 
-            <!-- 商品高密度展示 (一列多欄) -->
+            <!-- 商品高密度展示 -->
             <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             </div>
         </section>
@@ -239,7 +243,7 @@
             </div>
         </section>
 
-        <!-- =================== 賣家專屬：訂單分類管理 (含狀態分頁籤) =================== -->
+        <!-- =================== 賣家專屬：訂單分類管理 =================== -->
         <section id="view-admin" class="hidden space-y-5">
             <!-- 數據統計看板 -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
@@ -542,19 +546,18 @@
         // 👇 請在此貼上你已部署的 Google Apps Script Web App (/exec) 網址
         const DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxhcuPL99aT5FRGvnlWw7-hsu-HQQOJGIHey4nB5wfRZrYlfHSETxMmE4BMxYBeEfE/exec';
 
-        // 商品資料
+        // 預設商品資料（移除商品ID，以商品名稱作為唯一識別，數量為純數字）
         let productsDatabase = [
             {
-                id: 'home-01',
-                name: '(日本中心)Henteko Cute 熊寶寶抱枕',
-                category: 'home',
-                categoryName: '居家用品',
+                name: 'Henteko Cute 熊寶寶抱枕',
+                category: 'doll',
+                categoryName: '娃娃/吊飾',
                 type: 'instock',
-                price: 500,
+                price: 600,
                 originalPrice: 650,
-                stockText: '現貨 24H 快速寄出 (庫存 1 件)',
+                stock: 1,
                 image: 'https://placehold.co/500x500/fff7ed/9a3412?text=Henteko+Cute',
-                description: '日本寶可夢中心正版帶回，Henteko Cute 系列療癒造型抱枕。'
+                description: '日版，吊牌全新'
             }
         ];
 
@@ -569,7 +572,7 @@
             home: '居家用品'
         };
 
-        let activeCategory = 'home';
+        let activeCategory = 'doll';
         let cart = [];
         let orders = [];
         let currentOrderTab = 'ALL';
@@ -586,11 +589,10 @@
             'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
         };
 
-        // 解析庫存剩餘件數輔助函式
+        // 取得商品剩餘庫存（純數字欄位）
         function getRemainingStock(prod) {
-            if (!prod || prod.type !== 'instock') return Infinity;
-            const match = String(prod.stockText || '').match(/(\d+)\s*件/) || String(prod.stockText || '').match(/庫存\s*(\d+)/);
-            return match ? parseInt(match[1], 10) : Infinity;
+            if (!prod || prod.type === 'preorder') return Infinity;
+            return Math.max(0, Math.floor(Number(prod.stock) || 0));
         }
 
         // 後台解鎖
@@ -696,7 +698,7 @@
             }
             const descEl = document.getElementById('current-category-desc');
             if (descEl) {
-                descEl.innerHTML = `正在檢視：<strong>${CATEGORY_NAMES[catKey] || catKey}</strong>`;
+                descEl.innerHTML = `正在檢視：<strong>${CATEGORY_NAMES[catKey] || catKey}</strong>（點擊商品卡片即可加入購物車）`;
             }
             renderProducts();
         }
@@ -739,12 +741,26 @@
                 const isPreorder = p.type === 'preorder';
                 const remaining = getRemainingStock(p);
                 const isSoldOut = !isPreorder && remaining <= 0;
+                const stockDisplayText = isSoldOut
+                    ? '⚡ 已售完 (剩 0 件)'
+                    : isPreorder
+                        ? '✈️ 海外預購開放登記'
+                        : `現貨 24H 寄出 (剩 ${remaining} 件)`;
 
                 const card = document.createElement('div');
-                card.className = "group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col";
+                card.className = `group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs transition-all flex flex-col select-none ${
+                    isSoldOut
+                        ? 'opacity-70 cursor-not-allowed'
+                        : 'cursor-pointer hover:shadow-md hover:border-amber-400 active:scale-[0.98]'
+                }`;
+
+                if (!isSoldOut) {
+                    card.onclick = () => addToCartByName(p.name);
+                }
+
                 card.innerHTML = `
                     <div class="relative w-full aspect-square overflow-hidden bg-stone-100">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'opacity-50 grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
                         <div class="absolute top-2 left-2">
                             ${isSoldOut
                                 ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
@@ -759,23 +775,25 @@
                                        </span>`
                             }
                         </div>
+                        ${!isSoldOut ? `
+                        <div class="absolute bottom-2 right-2 bg-stone-900/85 group-hover:bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow transition flex items-center space-x-1">
+                            <i class="ph ph-shopping-bag-open"></i>
+                            <span>點擊加入</span>
+                        </div>` : ''}
                     </div>
-                    <div class="p-2.5 flex-1 flex flex-col justify-between space-y-2">
+                    <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
                         <div>
-                            <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-tight group-hover:text-amber-700 transition" title="${p.name}">
+                            <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition" title="${p.name}">
                                 ${p.name}
                             </h3>
-                            <p class="text-[10px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
-                            <p class="text-[10px] font-semibold mt-1.5 ${isSoldOut ? 'text-stone-400' : (isPreorder ? 'text-amber-700' : 'text-emerald-700')}">${p.stockText}</p>
+                            <p class="text-[11px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
+                            <p class="text-[11px] font-semibold mt-1.5 ${isSoldOut ? 'text-stone-400' : (isPreorder ? 'text-amber-700' : 'text-emerald-700')}">${stockDisplayText}</p>
                         </div>
-                        <div class="pt-2 border-t border-stone-100 flex items-center justify-between">
+                        <div class="pt-2 border-t border-stone-100 flex items-baseline justify-between">
                             <div>
-                                ${p.originalPrice > p.price ? `<span class="text-[10px] text-stone-400 line-through">NT$${p.originalPrice}</span>` : ''}
-                                <div class="text-xs sm:text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</div>
+                                ${p.originalPrice > p.price ? `<span class="text-[10px] text-stone-400 line-through mr-1">NT$${p.originalPrice}</span>` : ''}
+                                <span class="text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</span>
                             </div>
-                            <button onclick="addToCart('${p.id}')" ${isSoldOut ? 'disabled' : ''} class="${isSoldOut ? 'bg-stone-300 cursor-not-allowed' : 'bg-stone-900 hover:bg-amber-600 active:scale-95'} text-white p-2 rounded-lg transition shadow-sm">
-                                <i class="ph ph-plus-bold text-xs"></i>
-                            </button>
                         </div>
                     </div>
                 `;
@@ -783,9 +801,9 @@
             });
         }
 
-        // 購物車（含前端即時庫存上限防呆）
-        function addToCart(productId) {
-            const product = productsDatabase.find(p => p.id === productId);
+        // 購物車（以商品名稱作為唯一識別）
+        function addToCartByName(productName) {
+            const product = productsDatabase.find(p => p.name === productName);
             if (!product) return;
 
             const maxStock = getRemainingStock(product);
@@ -794,7 +812,7 @@
                 return;
             }
 
-            const existing = cart.find(i => i.product.id === productId);
+            const existing = cart.find(i => i.product.name === productName);
             if (existing) {
                 if (existing.quantity + 1 > maxStock) {
                     showToast(`⚠️ 現貨庫存僅剩 ${maxStock} 件，已達上限！`);
@@ -805,11 +823,11 @@
                 cart.push({ product, quantity: 1 });
             }
             updateCartUI();
-            showToast(`已加入「${product.name.slice(0, 10)}...」`);
+            showToast(`🛒 已加入「${product.name}」`);
         }
 
-        function updateCartQty(productId, delta) {
-            const item = cart.find(i => i.product.id === productId);
+        function updateCartQtyByName(productName, delta) {
+            const item = cart.find(i => i.product.name === productName);
             if (item) {
                 if (delta > 0) {
                     const maxStock = getRemainingStock(item.product);
@@ -820,7 +838,7 @@
                 }
                 item.quantity += delta;
                 if (item.quantity <= 0) {
-                    cart = cart.filter(i => i.product.id !== productId);
+                    cart = cart.filter(i => i.product.name !== productName);
                 }
             }
             updateCartUI();
@@ -890,6 +908,7 @@
             document.getElementById('checkout-start-btn').classList.remove('opacity-50', 'cursor-not-allowed');
 
             cart.forEach(i => {
+                const safeNameArg = i.product.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                 const div = document.createElement('div');
                 div.className = "flex space-x-2.5 p-2.5 bg-stone-50 rounded-xl border border-stone-200 items-center text-xs";
                 div.innerHTML = `
@@ -901,9 +920,9 @@
                         <h4 class="text-xs font-bold text-stone-900 truncate mt-0.5">${i.product.name}</h4>
                         <div class="text-[11px] font-mono font-bold text-stone-800 mt-0.5">NT$${i.product.price}</div>
                         <div class="flex items-center space-x-1.5 mt-1.5">
-                            <button onclick="updateCartQty('${i.product.id}', -1)" class="w-5 h-5 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">-</button>
+                            <button onclick="updateCartQtyByName('${safeNameArg}', -1)" class="w-6 h-6 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">-</button>
                             <span class="text-xs font-mono font-bold px-1">${i.quantity}</span>
-                            <button onclick="updateCartQty('${i.product.id}', 1)" class="w-5 h-5 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">+</button>
+                            <button onclick="updateCartQtyByName('${safeNameArg}', 1)" class="w-6 h-6 rounded bg-white border border-stone-300 font-bold flex items-center justify-center">+</button>
                         </div>
                     </div>
                     <div class="text-right">
@@ -927,7 +946,7 @@
             toggleCheckoutModal(true);
         }
 
-        // ==================== 下單傳送（雙向 JSON 確認真實寫入成功，無 no-cors 盲發） ====================
+        // ==================== 下單傳送（以商品名稱傳送明細並雙向 JSON 確認） ====================
         async function submitOrder(e) {
             e.preventDefault();
 
@@ -958,7 +977,6 @@
             const types = Array.from(new Set(cart.map(i => i.product.type === 'preorder' ? '海外預購' : '現貨'))).join(', ');
 
             const cartItemsPayload = cart.map(i => ({
-                id: i.product.id,
                 name: i.product.name,
                 type: i.product.type,
                 qty: i.quantity
@@ -975,7 +993,6 @@
             };
 
             try {
-                // 使用 text/plain 避開 CORS 預檢，並正式讀取 GAS 回傳的 JSON 結果
                 const res = await fetch(googleSheetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -984,13 +1001,11 @@
                 const result = await res.json();
 
                 if (!result || result.status !== 'success') {
-                    // 後端驗證失敗（例如庫存不足、被搶完或價格異常）
                     showToast(`❌ ${result && result.message ? result.message : '建立訂單失敗，請重新確認庫存'}`);
                     await syncProductsFromSheet();
                     return;
                 }
 
-                // 採用後端驗證確認後的真實金額
                 const confirmedOrder = {
                     orderId: result.orderId || orderId,
                     orderDate: nowString,
@@ -1008,9 +1023,18 @@
                     lineBound: false
                 };
 
+                // 同步扣減前端畫面庫存
+                cart.forEach(item => {
+                    const targetProd = productsDatabase.find(p => p.name === item.product.name);
+                    if (targetProd && targetProd.type === 'instock') {
+                        targetProd.stock = Math.max(0, (Number(targetProd.stock) || 0) - item.quantity);
+                    }
+                });
+
                 orders.unshift(confirmedOrder);
                 cart = [];
                 updateCartUI();
+                renderProducts();
                 await syncProductsFromSheet();
                 toggleCheckoutModal(false);
                 renderOrdersTable();
@@ -1357,7 +1381,7 @@
                 if (savedBuyer.lineId) document.getElementById('cust-line').value = savedBuyer.lineId;
             } catch (e) {}
 
-            selectCategory('home');
+            selectCategory('doll');
             updateCategoryBadges();
             updateCartUI();
             syncProductsFromSheet();
