@@ -308,7 +308,7 @@
                     </button>
                 </div>
 
-                <!-- 訂單清單表格（已移除取件門市欄位） -->
+                <!-- 訂單清單表格 -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-stone-600">
                         <thead class="bg-stone-100 text-stone-500 uppercase font-semibold border-b border-stone-200">
@@ -406,7 +406,7 @@
         </div>
     </div>
 
-    <!-- 結帳資料填寫彈窗（已刪除門市欄位） -->
+    <!-- 結帳資料填寫彈窗 -->
     <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 backdrop-blur-sm hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-stone-100">
@@ -586,6 +586,13 @@
             'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
         };
 
+        // 解析庫存剩餘件數輔助函式
+        function getRemainingStock(prod) {
+            if (!prod || prod.type !== 'instock') return Infinity;
+            const match = String(prod.stockText || '').match(/(\d+)\s*件/) || String(prod.stockText || '').match(/庫存\s*(\d+)/);
+            return match ? parseInt(match[1], 10) : Infinity;
+        }
+
         // 後台解鎖
         function handleSecretAdminClick() {
             adminClickCount++;
@@ -730,19 +737,26 @@
 
             filtered.forEach(p => {
                 const isPreorder = p.type === 'preorder';
+                const remaining = getRemainingStock(p);
+                const isSoldOut = !isPreorder && remaining <= 0;
+
                 const card = document.createElement('div');
                 card.className = "group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col";
                 card.innerHTML = `
                     <div class="relative w-full aspect-square overflow-hidden bg-stone-100">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'opacity-50 grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
                         <div class="absolute top-2 left-2">
-                            ${isPreorder 
-                                ? `<span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
-                                     <i class="ph ph-airplane-tilt"></i><span>海外預購</span>
+                            ${isSoldOut
+                                ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
+                                     <span>已售完</span>
                                    </span>`
-                                : `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 badge-pulse">
-                                     <i class="ph ph-lightning"></i><span>現貨</span>
-                                   </span>`
+                                : isPreorder 
+                                    ? `<span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
+                                         <i class="ph ph-airplane-tilt"></i><span>海外預購</span>
+                                       </span>`
+                                    : `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 badge-pulse">
+                                         <i class="ph ph-lightning"></i><span>現貨</span>
+                                       </span>`
                             }
                         </div>
                     </div>
@@ -752,14 +766,14 @@
                                 ${p.name}
                             </h3>
                             <p class="text-[10px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
-                            <p class="text-[10px] font-semibold mt-1.5 ${isPreorder ? 'text-amber-700' : 'text-emerald-700'}">${p.stockText}</p>
+                            <p class="text-[10px] font-semibold mt-1.5 ${isSoldOut ? 'text-stone-400' : (isPreorder ? 'text-amber-700' : 'text-emerald-700')}">${p.stockText}</p>
                         </div>
                         <div class="pt-2 border-t border-stone-100 flex items-center justify-between">
                             <div>
                                 ${p.originalPrice > p.price ? `<span class="text-[10px] text-stone-400 line-through">NT$${p.originalPrice}</span>` : ''}
                                 <div class="text-xs sm:text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</div>
                             </div>
-                            <button onclick="addToCart('${p.id}')" class="bg-stone-900 hover:bg-amber-600 text-white p-2 rounded-lg transition active:scale-95 shadow-sm">
+                            <button onclick="addToCart('${p.id}')" ${isSoldOut ? 'disabled' : ''} class="${isSoldOut ? 'bg-stone-300 cursor-not-allowed' : 'bg-stone-900 hover:bg-amber-600 active:scale-95'} text-white p-2 rounded-lg transition shadow-sm">
                                 <i class="ph ph-plus-bold text-xs"></i>
                             </button>
                         </div>
@@ -769,12 +783,23 @@
             });
         }
 
-        // 購物車
+        // 購物車（含前端即時庫存上限防呆）
         function addToCart(productId) {
             const product = productsDatabase.find(p => p.id === productId);
             if (!product) return;
+
+            const maxStock = getRemainingStock(product);
+            if (maxStock <= 0) {
+                showToast('⚠️ 此現貨商品已售完！');
+                return;
+            }
+
             const existing = cart.find(i => i.product.id === productId);
             if (existing) {
+                if (existing.quantity + 1 > maxStock) {
+                    showToast(`⚠️ 現貨庫存僅剩 ${maxStock} 件，已達上限！`);
+                    return;
+                }
                 existing.quantity += 1;
             } else {
                 cart.push({ product, quantity: 1 });
@@ -786,6 +811,13 @@
         function updateCartQty(productId, delta) {
             const item = cart.find(i => i.product.id === productId);
             if (item) {
+                if (delta > 0) {
+                    const maxStock = getRemainingStock(item.product);
+                    if (item.quantity + delta > maxStock) {
+                        showToast(`⚠️ 現貨庫存僅剩 ${maxStock} 件！`);
+                        return;
+                    }
+                }
                 item.quantity += delta;
                 if (item.quantity <= 0) {
                     cart = cart.filter(i => i.product.id !== productId);
@@ -895,7 +927,7 @@
             toggleCheckoutModal(true);
         }
 
-        // ==================== 下單傳送 ====================
+        // ==================== 下單傳送（雙向 JSON 確認真實寫入成功，無 no-cors 盲發） ====================
         async function submitOrder(e) {
             e.preventDefault();
 
@@ -906,7 +938,7 @@
 
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-sm"></i><span>正在產生訂單編號...</span>`;
+            submitBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-sm"></i><span>正在核對庫存並建立訂單...</span>`;
 
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
@@ -932,64 +964,69 @@
                 qty: i.quantity
             }));
 
-            const newOrder = {
+            const orderPayload = {
                 orderId: orderId,
                 orderDate: nowString,
                 customerName: name,
                 phone: phone,
                 lineId: lineId,
-                itemsSummary: itemsSummary,
                 cartItems: cartItemsPayload,
-                categories: categories,
-                types: types,
-                subtotal: finance.subtotal,
-                shippingFee: finance.shippingFee,
-                totalAmount: finance.total,
-                note: note,
-                status: 'NEW',
-                lineBound: false
+                note: note
             };
 
             try {
-                await fetch(googleSheetUrl, {
+                // 使用 text/plain 避開 CORS 預檢，並正式讀取 GAS 回傳的 JSON 結果
+                const res = await fetch(googleSheetUrl, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(newOrder)
+                    body: JSON.stringify(orderPayload)
                 });
-            } catch (netErr) {
-                console.error("發送訂單網路異常:", netErr);
-            }
+                const result = await res.json();
 
-            // 前端畫面庫存即時同步扣減
-            cart.forEach(item => {
-                const targetProd = productsDatabase.find(p => p.id === item.product.id);
-                if (targetProd && targetProd.type === 'instock' && targetProd.stockText) {
-                    const numMatch = targetProd.stockText.match(/(\d+)\s*件/) || targetProd.stockText.match(/庫存\s*(\d+)/);
-                    if (numMatch) {
-                        const cur = parseInt(numMatch[1], 10);
-                        const next = Math.max(0, cur - item.quantity);
-                        targetProd.stockText = next === 0
-                            ? "⚡ 已售完 (庫存 0 件)"
-                            : targetProd.stockText.replace(numMatch[0], numMatch[0].replace(numMatch[1], String(next)));
-                    }
+                if (!result || result.status !== 'success') {
+                    // 後端驗證失敗（例如庫存不足、被搶完或價格異常）
+                    showToast(`❌ ${result && result.message ? result.message : '建立訂單失敗，請重新確認庫存'}`);
+                    await syncProductsFromSheet();
+                    return;
                 }
-            });
 
-            orders.unshift(newOrder);
-            cart = [];
-            updateCartUI();
-            renderProducts();
-            toggleCheckoutModal(false);
-            renderOrdersTable();
-            updateStats();
+                // 採用後端驗證確認後的真實金額
+                const confirmedOrder = {
+                    orderId: result.orderId || orderId,
+                    orderDate: nowString,
+                    customerName: name,
+                    phone: phone,
+                    lineId: lineId,
+                    itemsSummary: itemsSummary,
+                    categories: categories,
+                    types: types,
+                    subtotal: result.subtotal !== undefined ? result.subtotal : finance.subtotal,
+                    shippingFee: result.shippingFee !== undefined ? result.shippingFee : finance.shippingFee,
+                    totalAmount: result.totalAmount !== undefined ? result.totalAmount : finance.total,
+                    note: note,
+                    status: 'NEW',
+                    lineBound: false
+                };
 
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i class="ph ph-paper-plane-tilt text-sm"></i><span>下一步：產生訂單編號並前往 LINE@ 綁定</span>`;
+                orders.unshift(confirmedOrder);
+                cart = [];
+                updateCartUI();
+                await syncProductsFromSheet();
+                toggleCheckoutModal(false);
+                renderOrdersTable();
+                updateStats();
 
-            document.getElementById('success-order-id').innerText = orderId;
-            document.getElementById('success-line-link').href = `https://line.me/R/oaMessage/${encodeURIComponent(MY_LINE_OA_ID)}/?${encodeURIComponent(orderId)}`;
-            document.getElementById('order-success-modal').classList.remove('hidden');
+                document.getElementById('success-order-id').innerText = confirmedOrder.orderId;
+                document.getElementById('success-line-link').href = `https://line.me/R/oaMessage/${encodeURIComponent(MY_LINE_OA_ID)}/?${encodeURIComponent(confirmedOrder.orderId)}`;
+                document.getElementById('order-success-modal').classList.remove('hidden');
+
+            } catch (netErr) {
+                console.error("發送訂單連線異常:", netErr);
+                showToast("⚠️ 網路連線異常或伺服器忙碌中，訂單尚未建立，請稍後再試！");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="ph ph-paper-plane-tilt text-sm"></i><span>下一步：產生訂單編號並前往 LINE@ 綁定</span>`;
+            }
         }
 
         function closeSuccessModal() {
@@ -1082,34 +1119,40 @@
             const order = orders.find(o => o.orderId === orderId);
             if (!order) return;
 
+            const prevStatus = order.status;
             order.status = newStatus;
             updateStats();
             renderOrdersTable();
-            
-            if (newStatus === 'FLIGHT') {
-                showToast(`✈️ 已更新 ${orderId} 為抵台，並自動推播 7-11 賣貨便下單卡片！`);
-            } else {
-                showToast(`已更新 ${orderId} 為「${ORDER_STATUS_MAP[newStatus].label}」！`);
-            }
 
             if (googleSheetUrl) {
                 try {
-                    await fetch(googleSheetUrl, {
+                    const res = await fetch(googleSheetUrl, {
                         method: 'POST',
-                        mode: 'no-cors',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify({
                             action: 'updateStatus',
                             orderId: order.orderId,
                             newStatus: newStatus,
                             newStatusLabel: ORDER_STATUS_MAP[newStatus].label,
-                            customerName: order.customerName,
-                            totalAmount: order.totalAmount,
-                            itemsSummary: order.itemsSummary
+                            customerName: order.customerName
                         })
                     });
+                    const result = await res.json();
+                    if (result && result.status === 'success') {
+                        if (newStatus === 'FLIGHT') {
+                            showToast(`✈️ 已更新 ${orderId} 為抵台，並自動推播 7-11 賣貨便下單卡片！`);
+                        } else {
+                            showToast(`✅ 已更新 ${orderId} 為「${ORDER_STATUS_MAP[newStatus].label}」！`);
+                        }
+                    } else {
+                        throw new Error(result ? result.message : '更新失敗');
+                    }
                 } catch (e) {
                     console.error("狀態同步失敗:", e);
+                    order.status = prevStatus;
+                    updateStats();
+                    renderOrdersTable();
+                    showToast(`❌ 狀態更新失敗：${e.message || '請檢查網路連線'}`);
                 }
             }
         }
