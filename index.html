@@ -33,7 +33,7 @@
         }
     </script>
     <style>
-        /* 全站基準字級放大 +2pt (16px + 2.67px ≈ 18.67px)，讓所有文字更清晰好讀 */
+        /* 全站基準字級放大 +2pt */
         html {
             font-size: 18.67px;
         }
@@ -79,7 +79,7 @@
     <!-- 導航列 -->
     <header class="sticky top-0 z-40 glass-panel border-b border-stone-200 shadow-sm">
         <div class="max-w-[1500px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between">
-            <!-- 品牌 LOGO (連點 3 下解鎖 Ann 賣家後台) -->
+            <!-- 品牌 LOGO -->
             <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretAdminClick()" title="連點 3 下開啟賣家後台">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-rose-500 text-white flex items-center justify-center font-bold text-lg shadow-md tracking-tighter">
                     PA
@@ -138,7 +138,7 @@
                         <span>7-11 賣貨便常態配合 ✦ 滿 NT$1,500 免運 (未達運費 $38)</span>
                     </div>
                     <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
-                    <p class="text-xs text-orange-100">點擊任意商品卡片即可加入購物車，商品抵台後將透過 LINE@ 傳送賣貨便下單連結！</p>
+                    <p class="text-xs text-orange-100">點圖片可左右滑動或放大看多張細節照，點下方價格區即可加入購物車！</p>
                 </div>
 
                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 w-full md:w-80 text-xs space-y-1.5">
@@ -196,7 +196,7 @@
                 </div>
 
                 <div class="pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
-                    <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong>（點擊商品卡片即可加入購物車）</span>
+                    <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong></span>
                     <span class="text-emerald-700 font-medium flex items-center space-x-1">
                         <i class="ph ph-check-circle"></i>
                         <span>已連線 Ann 選品庫存</span>
@@ -245,7 +245,6 @@
 
         <!-- =================== 賣家專屬：訂單分類管理 =================== -->
         <section id="view-admin" class="hidden space-y-5">
-            <!-- 數據統計看板 -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
                     <span class="text-xs text-stone-500 font-medium">總訂單數</span>
@@ -265,7 +264,6 @@
                 </div>
             </div>
 
-            <!-- 訂單分類列表 -->
             <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                 <div class="p-4 bg-stone-50 border-b border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <h3 class="font-bold text-sm text-stone-900 flex items-center space-x-2">
@@ -279,7 +277,6 @@
                     </button>
                 </div>
 
-                <!-- 狀態分頁導航標籤 (Tabs) -->
                 <div class="border-b border-stone-200 bg-white px-3 sm:px-4 flex gap-1 sm:gap-2 overflow-x-auto text-xs font-semibold pt-2 scrollbar-none">
                     <button onclick="setOrderTab('ALL')" id="tab-btn-ALL" class="order-tab-btn py-2.5 px-3 border-b-2 border-stone-900 text-stone-900 flex items-center space-x-1.5 transition">
                         <span>全部訂單</span>
@@ -312,7 +309,6 @@
                     </button>
                 </div>
 
-                <!-- 訂單清單表格 -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-stone-600">
                         <thead class="bg-stone-100 text-stone-500 uppercase font-semibold border-b border-stone-200">
@@ -358,6 +354,53 @@
             </div>
         </div>
     </footer>
+
+    <!-- 🌟 手機／桌機共用：多圖大圖燈箱 (Lightbox) -->
+    <div id="gallery-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/90 backdrop-blur-md hidden" role="dialog" aria-modal="true">
+        <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+            <!-- 燈箱頂欄 -->
+            <div class="px-4 py-3 border-b border-stone-100 flex items-center justify-between bg-stone-50">
+                <div class="flex items-center space-x-2 min-w-0">
+                    <span id="gallery-counter" class="bg-stone-900 text-white text-[11px] font-mono font-bold px-2 py-0.5 rounded-md flex-shrink-0">1 / 1</span>
+                    <h3 id="gallery-title" class="text-xs font-bold text-stone-900 truncate">商品名稱</h3>
+                </div>
+                <button onclick="closeGalleryModal()" class="p-1.5 rounded-lg text-stone-500 hover:bg-stone-200 hover:text-stone-900">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 燈箱主圖區（支援手指左右滑動切換與左右按鈕） -->
+            <div id="gallery-touch-area" class="relative w-full aspect-square bg-stone-100 flex items-center justify-center overflow-hidden select-none">
+                <img id="gallery-main-img" src="" alt="" class="w-full h-full object-contain transition-opacity duration-200" onerror="this.src='https://placehold.co/600x600/fff7ed/9a3412?text=Pika__Ann'">
+                
+                <button id="gallery-prev-btn" onclick="stepGallery(-1)" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-stone-900 shadow-md flex items-center justify-center transition">
+                    <i class="ph ph-caret-left-bold text-base"></i>
+                </button>
+                <button id="gallery-next-btn" onclick="stepGallery(1)" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-stone-900 shadow-md flex items-center justify-center transition">
+                    <i class="ph ph-caret-right-bold text-base"></i>
+                </button>
+            </div>
+
+            <!-- 縮圖快速切換列 -->
+            <div id="gallery-thumbs" class="px-4 py-2.5 bg-stone-50 border-t border-stone-100 flex items-center gap-2 overflow-x-auto">
+            </div>
+
+            <!-- 商品說明與滿版加入購物車按鈕 -->
+            <div class="p-4 border-t border-stone-200 bg-white space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                    <p id="gallery-desc" class="text-xs text-stone-600 leading-relaxed flex-1"></p>
+                    <div class="text-right flex-shrink-0">
+                        <div id="gallery-price" class="text-base font-bold text-stone-900 font-mono">NT$0</div>
+                        <div id="gallery-stock" class="text-[11px] font-semibold text-emerald-700"></div>
+                    </div>
+                </div>
+                <button id="gallery-add-btn" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-amber-600 text-white text-xs font-bold transition shadow flex items-center justify-center space-x-1.5">
+                    <i class="ph ph-shopping-bag-open text-base"></i>
+                    <span>加入購物車</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 購物車彈窗 -->
     <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden" role="dialog" aria-modal="true">
@@ -423,7 +466,6 @@
                 </button>
             </div>
 
-            <!-- 重要下單規則提示 -->
             <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl text-xs space-y-1 text-rose-950">
                 <div class="flex items-center space-x-1.5 font-bold text-rose-800">
                     <i class="ph ph-warning-circle text-base"></i>
@@ -546,7 +588,7 @@
         // 👇 請在此貼上你已部署的 Google Apps Script Web App (/exec) 網址
         const DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxhcuPL99aT5FRGvnlWw7-hsu-HQQOJGIHey4nB5wfRZrYlfHSETxMmE4BMxYBeEfE/exec';
 
-        // 預設商品資料（移除商品ID，以商品名稱作為唯一識別，數量為純數字）
+        // 預設商品資料（支援 images 陣列多圖輪播）
         let productsDatabase = [
             {
                 name: 'Henteko Cute 熊寶寶抱枕',
@@ -557,6 +599,7 @@
                 originalPrice: 650,
                 stock: 1,
                 image: 'https://placehold.co/500x500/fff7ed/9a3412?text=Henteko+Cute',
+                images: ['https://placehold.co/500x500/fff7ed/9a3412?text=Henteko+Cute'],
                 description: '日版，吊牌全新'
             }
         ];
@@ -581,6 +624,12 @@
         let adminClickCount = 0;
         let googleSheetUrl = DEFAULT_SHEET_URL;
 
+        // 紀錄每張商品卡片目前顯示第幾張圖 { [productName]: index }
+        let cardImageIndices = {};
+        // 大圖燈箱目前狀態
+        let activeGalleryProduct = null;
+        let activeGalleryIndex = 0;
+
         const ORDER_STATUS_MAP = {
             'NEW': { label: '新進訂單 (待確認)', color: 'bg-amber-100 text-amber-800' },
             'PURCHASING': { label: '海外採購中', color: 'bg-blue-100 text-blue-800' },
@@ -589,7 +638,12 @@
             'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
         };
 
-        // 取得商品剩餘庫存（純數字欄位）
+        function getProductImages(prod) {
+            if (Array.isArray(prod.images) && prod.images.length > 0) return prod.images;
+            if (prod.image) return [prod.image];
+            return ['https://placehold.co/500x500/fff7ed/9a3412?text=Pika__Ann'];
+        }
+
         function getRemainingStock(prod) {
             if (!prod || prod.type === 'preorder') return Infinity;
             return Math.max(0, Math.floor(Number(prod.stock) || 0));
@@ -698,7 +752,7 @@
             }
             const descEl = document.getElementById('current-category-desc');
             if (descEl) {
-                descEl.innerHTML = `正在檢視：<strong>${CATEGORY_NAMES[catKey] || catKey}</strong>（點擊商品卡片即可加入購物車）`;
+                descEl.innerHTML = `正在檢視：<strong>${CATEGORY_NAMES[catKey] || catKey}</strong>`;
             }
             renderProducts();
         }
@@ -712,6 +766,29 @@
             document.getElementById('badge-count-keychain').innerText = counts.keychain;
             document.getElementById('badge-count-decor').innerText = counts.decor;
             document.getElementById('badge-count-home').innerText = counts.home;
+        }
+
+        // 原地切換小卡片目前顯示的照片索引
+        function switchCardImage(prodName, newIndex) {
+            const prod = productsDatabase.find(p => p.name === prodName);
+            if (!prod) return;
+            const imgs = getProductImages(prod);
+            if (imgs.length <= 1) return;
+
+            const safeIdx = (newIndex + imgs.length) % imgs.length;
+            cardImageIndices[prodName] = safeIdx;
+
+            const imgEl = document.querySelector(`[data-card-img="${CSS.escape(prodName)}"]`);
+            const counterEl = document.querySelector(`[data-card-counter="${CSS.escape(prodName)}"]`);
+            const dots = document.querySelectorAll(`[data-card-dot="${CSS.escape(prodName)}"]`);
+
+            if (imgEl) imgEl.src = imgs[safeIdx];
+            if (counterEl) counterEl.innerText = `${safeIdx + 1}/${imgs.length}`;
+            dots.forEach((dot, idx) => {
+                dot.className = idx === safeIdx
+                    ? "w-2 h-1.5 rounded-full bg-amber-400 transition-all"
+                    : "w-1.5 h-1.5 rounded-full bg-white/75 transition-all";
+            });
         }
 
         function renderProducts() {
@@ -747,61 +824,221 @@
                         ? '✈️ 海外預購開放登記'
                         : `現貨 24H 寄出 (剩 ${remaining} 件)`;
 
+                const imgs = getProductImages(p);
+                const hasMultiple = imgs.length > 1;
+                const curIdx = Math.min(cardImageIndices[p.name] || 0, imgs.length - 1);
+
                 const card = document.createElement('div');
                 card.className = `group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs transition-all flex flex-col select-none ${
-                    isSoldOut
-                        ? 'opacity-70 cursor-not-allowed'
-                        : 'cursor-pointer hover:shadow-md hover:border-amber-400 active:scale-[0.98]'
+                    isSoldOut ? 'opacity-70' : 'hover:shadow-md hover:border-amber-400'
+                }`;
+
+                // 圖片區塊：支援手機左右滑動切圖 + 點擊開全螢幕大圖燈箱
+                const imgBox = document.createElement('div');
+                imgBox.className = "relative w-full aspect-square overflow-hidden bg-stone-100 cursor-zoom-in";
+
+                let touchStartX = 0;
+                let touchMoved = false;
+
+                imgBox.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    touchMoved = false;
+                }, { passive: true });
+
+                imgBox.addEventListener('touchmove', (e) => {
+                    if (Math.abs(e.touches[0].clientX - touchStartX) > 12) {
+                        touchMoved = true;
+                    }
+                }, { passive: true });
+
+                imgBox.addEventListener('touchend', (e) => {
+                    const diffX = e.changedTouches[0].clientX - touchStartX;
+                    if (hasMultiple && Math.abs(diffX) > 35) {
+                        const current = cardImageIndices[p.name] || 0;
+                        switchCardImage(p.name, diffX < 0 ? current + 1 : current - 1);
+                    }
+                });
+
+                imgBox.addEventListener('click', () => {
+                    if (!touchMoved) {
+                        openGalleryModal(p.name, cardImageIndices[p.name] || 0);
+                    }
+                });
+
+                const dotsHtml = hasMultiple
+                    ? `<div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center space-x-1 bg-stone-900/50 backdrop-blur-xs px-2 py-1 rounded-full">
+                        ${imgs.map((_, idx) => `<span data-card-dot="${p.name.replace(/"/g, '&quot;')}" class="${idx === curIdx ? 'w-2 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/75'} rounded-full transition-all"></span>`).join('')}
+                       </div>`
+                    : '';
+
+                const multiBadgeHtml = hasMultiple
+                    ? `<div class="absolute top-2 right-2 bg-stone-900/75 text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 backdrop-blur-xs">
+                         <i class="ph ph-images text-xs text-amber-300"></i>
+                         <span data-card-counter="${p.name.replace(/"/g, '&quot;')}">${curIdx + 1}/${imgs.length}</span>
+                       </div>`
+                    : `<div class="absolute bottom-2 right-2 bg-stone-900/60 text-white p-1.5 rounded-lg opacity-80 group-hover:opacity-100 transition">
+                         <i class="ph ph-magnifying-glass-plus text-xs"></i>
+                       </div>`;
+
+                imgBox.innerHTML = `
+                    <img data-card-img="${p.name.replace(/"/g, '&quot;')}" src="${imgs[curIdx]}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                    <div class="absolute top-2 left-2">
+                        ${isSoldOut
+                            ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
+                                 <span>已售完</span>
+                               </span>`
+                            : isPreorder 
+                                ? `<span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
+                                     <i class="ph ph-airplane-tilt"></i><span>海外預購</span>
+                                   </span>`
+                                : `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 badge-pulse">
+                                     <i class="ph ph-lightning"></i><span>現貨</span>
+                                   </span>`
+                        }
+                    </div>
+                    ${multiBadgeHtml}
+                    ${dotsHtml}
+                `;
+
+                // 下半部資訊與購買區：整塊點擊加入購物車（防手機誤觸圖片）
+                const infoBox = document.createElement('div');
+                infoBox.className = `p-3 flex-1 flex flex-col justify-between space-y-2 ${
+                    isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer active:bg-amber-50/70'
                 }`;
 
                 if (!isSoldOut) {
-                    card.onclick = () => addToCartByName(p.name);
+                    infoBox.onclick = () => addToCartByName(p.name);
                 }
 
-                card.innerHTML = `
-                    <div class="relative w-full aspect-square overflow-hidden bg-stone-100">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
-                        <div class="absolute top-2 left-2">
-                            ${isSoldOut
-                                ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
-                                     <span>已售完</span>
-                                   </span>`
-                                : isPreorder 
-                                    ? `<span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
-                                         <i class="ph ph-airplane-tilt"></i><span>海外預購</span>
-                                       </span>`
-                                    : `<span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 badge-pulse">
-                                         <i class="ph ph-lightning"></i><span>現貨</span>
-                                       </span>`
-                            }
-                        </div>
-                        ${!isSoldOut ? `
-                        <div class="absolute bottom-2 right-2 bg-stone-900/85 group-hover:bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow transition flex items-center space-x-1">
-                            <i class="ph ph-shopping-bag-open"></i>
-                            <span>點擊加入</span>
-                        </div>` : ''}
+                infoBox.innerHTML = `
+                    <div>
+                        <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition" title="${p.name}">
+                            ${p.name}
+                        </h3>
+                        <p class="text-[11px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
+                        <p class="text-[11px] font-semibold mt-1.5 ${isSoldOut ? 'text-stone-400' : (isPreorder ? 'text-amber-700' : 'text-emerald-700')}">${stockDisplayText}</p>
                     </div>
-                    <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
+                    <div class="pt-2 border-t border-stone-100 flex items-center justify-between gap-1">
                         <div>
-                            <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition" title="${p.name}">
-                                ${p.name}
-                            </h3>
-                            <p class="text-[11px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
-                            <p class="text-[11px] font-semibold mt-1.5 ${isSoldOut ? 'text-stone-400' : (isPreorder ? 'text-amber-700' : 'text-emerald-700')}">${stockDisplayText}</p>
+                            ${p.originalPrice > p.price ? `<span class="text-[10px] text-stone-400 line-through block leading-none">NT$${p.originalPrice}</span>` : ''}
+                            <span class="text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</span>
                         </div>
-                        <div class="pt-2 border-t border-stone-100 flex items-baseline justify-between">
-                            <div>
-                                ${p.originalPrice > p.price ? `<span class="text-[10px] text-stone-400 line-through mr-1">NT$${p.originalPrice}</span>` : ''}
-                                <span class="text-sm font-bold text-stone-900 font-mono">NT$${p.price.toLocaleString()}</span>
-                            </div>
-                        </div>
+                        <span class="${isSoldOut ? 'bg-stone-200 text-stone-500' : 'bg-stone-900 group-hover:bg-amber-600 text-white'} text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition shadow-xs flex items-center space-x-1">
+                            <i class="ph ph-bag-simple-bold"></i>
+                            <span>${isSoldOut ? '售完' : '加入'}</span>
+                        </span>
                     </div>
                 `;
+
+                card.appendChild(imgBox);
+                card.appendChild(infoBox);
                 grid.appendChild(card);
             });
         }
 
-        // 購物車（以商品名稱作為唯一識別）
+        // ==================== 全螢幕大圖燈箱 (Lightbox) 邏輯 ====================
+        function openGalleryModal(productName, startIndex = 0) {
+            const prod = productsDatabase.find(p => p.name === productName);
+            if (!prod) return;
+
+            activeGalleryProduct = prod;
+            const imgs = getProductImages(prod);
+            activeGalleryIndex = Math.max(0, Math.min(startIndex, imgs.length - 1));
+
+            const remaining = getRemainingStock(prod);
+            const isSoldOut = prod.type !== 'preorder' && remaining <= 0;
+
+            document.getElementById('gallery-title').innerText = prod.name;
+            document.getElementById('gallery-desc').innerText = prod.description || '正品代購選品';
+            document.getElementById('gallery-price').innerText = `NT$${prod.price.toLocaleString()}`;
+            document.getElementById('gallery-stock').innerText = isSoldOut
+                ? '⚡ 已售完'
+                : prod.type === 'preorder'
+                    ? '✈️ 海外預購'
+                    : `現貨剩 ${remaining} 件`;
+
+            const addBtn = document.getElementById('gallery-add-btn');
+            if (isSoldOut) {
+                addBtn.disabled = true;
+                addBtn.className = "w-full py-3 rounded-xl bg-stone-300 text-stone-500 text-xs font-bold cursor-not-allowed flex items-center justify-center space-x-1.5";
+                addBtn.innerHTML = `<span>此現貨已售完</span>`;
+                addBtn.onclick = null;
+            } else {
+                addBtn.disabled = false;
+                addBtn.className = "w-full py-3 rounded-xl bg-stone-900 hover:bg-amber-600 text-white text-xs font-bold transition shadow flex items-center justify-center space-x-1.5";
+                addBtn.innerHTML = `<i class="ph ph-shopping-bag-open text-base"></i><span>加入購物車 (NT$${prod.price.toLocaleString()})</span>`;
+                addBtn.onclick = () => {
+                    addToCartByName(prod.name);
+                    closeGalleryModal();
+                };
+            }
+
+            // 只有 1 張圖時隱藏左右切換箭頭與縮圖列
+            const hasMultiple = imgs.length > 1;
+            document.getElementById('gallery-prev-btn').classList.toggle('hidden', !hasMultiple);
+            document.getElementById('gallery-next-btn').classList.toggle('hidden', !hasMultiple);
+            document.getElementById('gallery-thumbs').classList.toggle('hidden', !hasMultiple);
+
+            renderGallerySlide();
+            document.getElementById('gallery-modal').classList.remove('hidden');
+        }
+
+        function renderGallerySlide() {
+            if (!activeGalleryProduct) return;
+            const imgs = getProductImages(activeGalleryProduct);
+            const total = imgs.length;
+
+            document.getElementById('gallery-counter').innerText = `${activeGalleryIndex + 1} / ${total}`;
+            document.getElementById('gallery-main-img').src = imgs[activeGalleryIndex];
+
+            const thumbsContainer = document.getElementById('gallery-thumbs');
+            thumbsContainer.innerHTML = '';
+            if (total > 1) {
+                imgs.forEach((url, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `w-14 h-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition ${
+                        idx === activeGalleryIndex ? 'border-amber-500 scale-105 shadow-xs' : 'border-transparent opacity-60 hover:opacity-100'
+                    }`;
+                    btn.onclick = () => {
+                        activeGalleryIndex = idx;
+                        renderGallerySlide();
+                    };
+                    btn.innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
+                    thumbsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        function stepGallery(delta) {
+            if (!activeGalleryProduct) return;
+            const imgs = getProductImages(activeGalleryProduct);
+            if (imgs.length <= 1) return;
+            activeGalleryIndex = (activeGalleryIndex + delta + imgs.length) % imgs.length;
+            renderGallerySlide();
+        }
+
+        function closeGalleryModal() {
+            document.getElementById('gallery-modal').classList.add('hidden');
+            activeGalleryProduct = null;
+        }
+
+        // 綁定燈箱大圖手指左右滑動手勢
+        (function initGallerySwipe() {
+            const touchArea = document.getElementById('gallery-touch-area');
+            if (!touchArea) return;
+            let startX = 0;
+            touchArea.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true });
+            touchArea.addEventListener('touchend', (e) => {
+                const diffX = e.changedTouches[0].clientX - startX;
+                if (Math.abs(diffX) > 40) {
+                    stepGallery(diffX < 0 ? 1 : -1);
+                }
+            });
+        })();
+
+        // 購物車
         function addToCartByName(productName) {
             const product = productsDatabase.find(p => p.name === productName);
             if (!product) return;
@@ -909,10 +1146,11 @@
 
             cart.forEach(i => {
                 const safeNameArg = i.product.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const firstImg = getProductImages(i.product)[0];
                 const div = document.createElement('div');
                 div.className = "flex space-x-2.5 p-2.5 bg-stone-50 rounded-xl border border-stone-200 items-center text-xs";
                 div.innerHTML = `
-                    <img src="${i.product.image}" class="w-14 h-14 object-cover rounded-lg border border-stone-200 flex-shrink-0">
+                    <img src="${firstImg}" class="w-14 h-14 object-cover rounded-lg border border-stone-200 flex-shrink-0">
                     <div class="flex-1 min-w-0">
                         <span class="text-[9px] px-1 py-0.2 rounded font-bold ${i.product.type === 'preorder' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
                             ${i.product.type === 'preorder' ? '預購' : '現貨'}
@@ -946,7 +1184,7 @@
             toggleCheckoutModal(true);
         }
 
-        // ==================== 下單傳送（以商品名稱傳送明細並雙向 JSON 確認） ====================
+        // ==================== 下單傳送 ====================
         async function submitOrder(e) {
             e.preventDefault();
 
@@ -1023,7 +1261,6 @@
                     lineBound: false
                 };
 
-                // 同步扣減前端畫面庫存
                 cart.forEach(item => {
                     const targetProd = productsDatabase.find(p => p.name === item.product.name);
                     if (targetProd && targetProd.type === 'instock') {
