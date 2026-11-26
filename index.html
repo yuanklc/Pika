@@ -704,7 +704,7 @@
         }
 
         function getRemainingStock(prod) {
-            if (!prod || prod.type === 'preorder') return Infinity;
+            if (!prod) return 0;
             return Math.max(0, Math.floor(Number(prod.stock) || 0));
         }
 
@@ -898,11 +898,11 @@
             filtered.forEach(p => {
                 const isPreorder = p.type === 'preorder';
                 const remaining = getRemainingStock(p);
-                const isSoldOut = !isPreorder && remaining <= 0;
+                const isSoldOut = remaining <= 0; // 👈 只要數量 <= 0，無論現貨或預購一律顯示已售完
                 const stockDisplayText = isSoldOut
                     ? '⚡ 已售完 (剩 0 件)'
                     : isPreorder
-                        ? '✈️ 海外預購開放登記'
+                        ? `✈️ 海外預購 (剩 ${remaining} 件)`
                         : `現貨 24H 寄出 (剩 ${remaining} 件)`;
 
                 const imgs = getProductImages(p);
@@ -1025,8 +1025,9 @@
             const imgs = getProductImages(prod);
             activeGalleryIndex = Math.max(0, Math.min(startIndex, imgs.length - 1));
 
+           // openGalleryModal() 內：
             const remaining = getRemainingStock(prod);
-            const isSoldOut = prod.type !== 'preorder' && remaining <= 0;
+            const isSoldOut = remaining <= 0;
 
             document.getElementById('gallery-title').innerText = prod.name;
             document.getElementById('gallery-desc').innerText = prod.description || '正品代購選品';
@@ -1034,7 +1035,7 @@
             document.getElementById('gallery-stock').innerText = isSoldOut
                 ? '⚡ 已售完'
                 : prod.type === 'preorder'
-                    ? '✈️ 海外預購'
+                    ? `✈️ 海外預購 (剩 ${remaining} 件)`
                     : `現貨剩 ${remaining} 件`;
 
             const addBtn = document.getElementById('gallery-add-btn');
@@ -1448,9 +1449,10 @@
                     lineBound: false
                 };
 
+                // submitOrder() 成功後同步扣減前端畫面數量（預購與現貨一起扣）：
                 cart.forEach(item => {
                     const targetProd = productsDatabase.find(p => p.name === item.product.name);
-                    if (targetProd && targetProd.type === 'instock') {
+                    if (targetProd) {
                         targetProd.stock = Math.max(0, (Number(targetProd.stock) || 0) - item.quantity);
                     }
                 });
