@@ -589,7 +589,7 @@
                 <div id="success-bank-text" class="text-xs font-mono bg-white p-2 rounded-lg border border-amber-200 text-stone-800 break-all leading-relaxed"></div>
                 <button type="button" onclick="copyBankInfo()" class="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-[11px] font-bold transition flex items-center justify-center space-x-1">
                     <i class="ph ph-copy"></i>
-                    <span>一鍵複製匯款資訊</span>
+                    <span>一鍵複製匯款帳號</span>
                 </button>
             </div>
 
@@ -721,10 +721,13 @@
         function copyBankInfo() {
             const text = document.getElementById('success-bank-text').innerText;
             if (!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 已複製匯款帳戶資訊！');
+            // 僅擷取 10~16 碼純數字銀行帳號（777203881489），不帶銀行名稱或中文符號
+            const accMatch = text.match(/\d{10,16}/);
+            const accountOnly = accMatch ? accMatch[0] : '777203881489';
+            navigator.clipboard.writeText(accountOnly).then(() => {
+                showToast(`📋 已複製匯款帳號：${accountOnly}`);
             }).catch(() => {
-                showToast('⚠️ 請長按文字手動複製匯款帳號');
+                showToast(`⚠️ 請手動複製帳號：${accountOnly}`);
             });
         }
 
@@ -1468,7 +1471,7 @@
                 if (isBankMode) {
                     bankBox.classList.remove('hidden');
                     document.getElementById('success-bank-amount').innerText = `應匯：NT$ ${verifiedTotal.toLocaleString()}`;
-                    document.getElementById('success-bank-text').innerText = result.bankInfo || '請點擊下方按鈕至 LINE@ 取得匯款帳號';
+                    document.getElementById('success-bank-text').innerText = result.bankInfo || '(008) 華南銀行｜帳號：777203881489';
                     document.getElementById('success-modal-desc').innerText =
                         '請先複製上方帳號完成匯款，並點擊下方綠色按鈕至 LINE@ 傳送訂單編號完成綁定與回報帳號後五碼！';
                     document.getElementById('success-line-btn-label').innerText = '前往 LINE@ 綁定編號並回報後五碼';
