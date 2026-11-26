@@ -60,7 +60,7 @@
     <div class="bg-stone-900 text-stone-200 text-xs py-1.5 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 tracking-wide">
         <div class="flex items-center space-x-2">
             <span class="inline-block w-2 h-2 rounded-full bg-line animate-ping"></span>
-            <span><strong>Pika__Ann</strong> 官方代購 ✦ <strong>7-11 賣貨便</strong>滿 $1,500 免運｜<strong>匯款/收款碼</strong>滿 $2,000 免運！</span>
+            <span><strong>Pika__Ann</strong> 官方代購 ✦ <strong>7-11 賣貨便</strong>滿 $1,500 免運｜<strong>匯款</strong>滿 $2,000 免運！</span>
         </div>
         
         <div class="flex items-center space-x-3 text-[11px]">
@@ -135,7 +135,7 @@
                 <div class="space-y-1 text-center md:text-left">
                     <div class="inline-flex items-center space-x-1.5 bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur">
                         <i class="ph ph-truck text-sm"></i>
-                        <span>7-11 賣貨便滿 $1,500 免運 ✦ 匯款/收款碼滿 $2,000 免運</span>
+                        <span>7-11 賣貨便滿 $1,500 免運 ✦ 匯款滿 $2,000 免運</span>
                     </div>
                     <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
                     <p class="text-xs text-orange-100">點圖片可左右滑動或放大看細節照，全館現貨支援賣貨便直購或匯款寄件！</p>
@@ -320,7 +320,7 @@
                     <table class="w-full text-left text-xs text-stone-600">
                         <thead class="bg-stone-100 text-stone-500 uppercase font-semibold border-b border-stone-200">
                             <tr>
-                                <th class="p-3">訂單編號 / 模式</th>
+                                <th class="p-3">訂單編號 / 供應模式</th>
                                 <th class="p-3">買家資料 / LINE 綁定</th>
                                 <th class="p-3">取件門市 (匯款單)</th>
                                 <th class="p-3">選購明細</th>
@@ -448,14 +448,14 @@
                                     <i class="ph ph-storefront"></i>
                                     <span>7-11 賣貨便</span>
                                 </div>
-                                <div class="text-[10px] text-orange-700 mt-0.5">滿 $1,500 免運・直跳賣場</div>
+                                <div class="text-[10px] text-orange-700 mt-0.5">運費 $38・滿 $1,500 免運</div>
                             </button>
                             <button type="button" id="btn-mode-bank" onclick="setCheckoutMode('bank_transfer')" class="p-2 rounded-xl border border-stone-300 bg-white text-left transition hover:border-stone-400">
                                 <div class="text-[11px] font-bold text-stone-800 flex items-center space-x-1">
-                                    <i class="ph ph-qr-code"></i>
-                                    <span>匯款 / 收款碼</span>
+                                    <i class="ph ph-bank"></i>
+                                    <span>匯款 (純取貨)</span>
                                 </div>
-                                <div class="text-[10px] text-stone-500 mt-0.5">滿 $2,000 免運・純取貨寄出</div>
+                                <div class="text-[10px] text-stone-500 mt-0.5">運費 $60・滿 $2,000 免運</div>
                             </button>
                         </div>
                     </div>
@@ -523,7 +523,7 @@
                     </div>
                 </div>
 
-                <!-- 僅在「現貨匯款/收款碼」模式顯示的 7-11 取件門市欄位 -->
+                <!-- 僅在「現貨匯款」模式顯示的 7-11 取件門市欄位 -->
                 <div id="bank-store-field" class="hidden">
                     <div class="flex justify-between items-center mb-1">
                         <label class="font-bold text-stone-700">7-11 純取貨門市與店號 *</label>
@@ -565,18 +565,35 @@
         </div>
     </div>
 
-    <!-- 委託成功與強制引導回填彈窗 -->
+    <!-- 委託成功與無斷點匯款展示＋強制引導綁定彈窗 -->
     <div id="order-success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/75 backdrop-blur-sm hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4 border-2 border-rose-500">
-            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-2xl animate-bounce">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl text-center space-y-3.5 border-2 border-rose-500 max-h-[92vh] overflow-y-auto">
+            <div class="w-11 h-11 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-2xl animate-bounce">
                 <i class="ph ph-warning-bold"></i>
             </div>
             <div>
                 <span class="inline-block bg-rose-100 text-rose-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full mb-1">尚未完成最後一步！</span>
-                <h3 class="text-base font-bold text-stone-900">請立即綁定 LINE@ 完成下單</h3>
+                <h3 class="text-base font-bold text-stone-900">請完成匯款並綁定 LINE@</h3>
                 <p class="text-xs text-stone-500 mt-1">訂單編號：<span id="success-order-id" class="font-mono font-bold text-amber-800 text-sm"></span></p>
             </div>
-            <div class="bg-rose-50 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-950 text-left space-y-2">
+
+            <!-- 🌟 現貨匯款專屬：下單完成頁直接顯示匯款帳戶與一鍵複製按鈕（零斷點體驗） -->
+            <div id="success-bank-box" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-3 text-left space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-amber-900 flex items-center space-x-1">
+                        <i class="ph ph-bank text-base"></i>
+                        <span>匯款帳戶資訊</span>
+                    </span>
+                    <span id="success-bank-amount" class="text-xs font-mono font-bold text-rose-700"></span>
+                </div>
+                <div id="success-bank-text" class="text-xs font-mono bg-white p-2 rounded-lg border border-amber-200 text-stone-800 break-all leading-relaxed"></div>
+                <button type="button" onclick="copyBankInfo()" class="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-[11px] font-bold transition flex items-center justify-center space-x-1">
+                    <i class="ph ph-copy"></i>
+                    <span>一鍵複製匯款資訊</span>
+                </button>
+            </div>
+
+            <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-950 text-left space-y-1.5">
                 <p class="font-bold text-rose-800 flex items-center space-x-1">
                     <i class="ph ph-warning-octagon text-base"></i>
                     <span>未傳送訂單編號綁定 LINE 將視為「下單未完成」！</span>
@@ -588,7 +605,7 @@
             <div class="space-y-2">
                 <a id="success-line-link" href="https://line.me/R/ti/p/@730clyju" target="_blank" class="w-full bg-line hover:bg-line-hover text-white py-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition shadow-lg shadow-emerald-200">
                     <i class="ph ph-chat-circle-dots text-lg"></i>
-                    <span>立即前往 LINE@ 傳送編號完成下單</span>
+                    <span id="success-line-btn-label">立即前往 LINE@ 傳送編號完成下單</span>
                 </a>
                 <button onclick="closeSuccessModal()" class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-500 text-[11px] font-medium rounded-xl transition">
                     我已傳送並收到機器人回覆，關閉視窗
@@ -642,7 +659,8 @@
             }
         ];
 
-        const SHIPPING_FEE_STANDARD = 38;
+        const SHIPPING_FEE_MYSHIP = 38;
+        const SHIPPING_FEE_BANK = 60;
         const FREE_SHIPPING_MYSHIP = 1500;
         const FREE_SHIPPING_BANK = 2000;
         const MY_LINE_OA_ID = '@730clyju';
@@ -664,7 +682,7 @@
         let googleSheetUrl = DEFAULT_SHEET_URL;
         let myshipStoreUrl = DEFAULT_MYSHIP_URL;
 
-        // 純現貨時買家選擇的結帳模式：'myship_direct'（直跳賣貨便）或 'bank_transfer'（匯款/收款碼）
+        // 純現貨時買家選擇的結帳模式：'myship_direct'（直跳賣貨便）或 'bank_transfer'（匯款）
         let selectedInstockMode = 'myship_direct';
 
         let cardImageIndices = {};
@@ -690,16 +708,24 @@
             return Math.max(0, Math.floor(Number(prod.stock) || 0));
         }
 
-        // 判斷目前購物車是否「全部為現貨」
         function isCartAllInstock() {
             if (cart.length === 0) return true;
             return cart.every(item => item.product.type === 'instock');
         }
 
-        // 切換純現貨結帳方式
         function setCheckoutMode(mode) {
             selectedInstockMode = mode;
             updateCartUI();
+        }
+
+        function copyBankInfo() {
+            const text = document.getElementById('success-bank-text').innerText;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 已複製匯款帳戶資訊！');
+            }).catch(() => {
+                showToast('⚠️ 請長按文字手動複製匯款帳號');
+            });
         }
 
         // 後台解鎖
@@ -879,7 +905,7 @@
                 const imgs = getProductImages(p);
                 const hasMultiple = imgs.length > 1;
                 const curIdx = Math.min(cardImageIndices[p.name] || 0, imgs.length - 1);
-                const escapedNameAttr = p.name.replace(/"/g, '&quot;');
+                const escapedNameAttr = p.name.replace(/"/g, '"');
 
                 const card = document.createElement('div');
                 card.className = `group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs transition-all flex flex-col select-none ${
@@ -1087,7 +1113,7 @@
             });
         })();
 
-        // ==================== 購物車與雙免運門檻計算 ====================
+        // ==================== 購物車與雙免運門檻計算（賣貨便 $38/1500；匯款 $60/2000） ====================
         function addToCartByName(productName) {
             const product = productsDatabase.find(p => p.name === productName);
             if (!product) return;
@@ -1133,16 +1159,19 @@
         function calculateCartFinance() {
             const allInstock = isCartAllInstock();
             const effectiveMode = allInstock ? selectedInstockMode : 'preorder_myship';
-            const threshold = (effectiveMode === 'bank_transfer') ? FREE_SHIPPING_BANK : FREE_SHIPPING_MYSHIP;
+            const isBankMode = effectiveMode === 'bank_transfer';
+
+            const threshold = isBankMode ? FREE_SHIPPING_BANK : FREE_SHIPPING_MYSHIP;
+            const baseShipping = isBankMode ? SHIPPING_FEE_BANK : SHIPPING_FEE_MYSHIP;
 
             const subtotal = cart.reduce((acc, i) => acc + (i.product.price * i.quantity), 0);
             const isFreeShipping = subtotal >= threshold;
-            const shippingFee = (cart.length === 0 || isFreeShipping) ? 0 : SHIPPING_FEE_STANDARD;
+            const shippingFee = (cart.length === 0 || isFreeShipping) ? 0 : baseShipping;
             const total = subtotal + shippingFee;
             const diff = Math.max(0, threshold - subtotal);
             const percent = Math.min(100, Math.round((subtotal / threshold) * 100));
 
-            return { subtotal, isFreeShipping, shippingFee, total, diff, percent, threshold, effectiveMode, allInstock };
+            return { subtotal, isFreeShipping, shippingFee, baseShipping, total, diff, percent, threshold, effectiveMode, allInstock };
         }
 
         function updateCartUI() {
@@ -1154,7 +1183,7 @@
             const freeTag = document.getElementById('free-shipping-tag');
             if (topLabel) {
                 topLabel.innerText = finance.effectiveMode === 'bank_transfer'
-                    ? '匯款/收款碼免運進度 ($2,000 門檻)'
+                    ? '匯款免運進度 ($2,000 門檻)'
                     : '7-11 賣貨便免運進度 ($1,500 門檻)';
             }
             if (finance.isFreeShipping && finance.subtotal > 0) {
@@ -1176,7 +1205,7 @@
             const cartRuleTitle = document.getElementById('cart-shipping-rule-title');
 
             cartRuleTitle.innerText = finance.effectiveMode === 'bank_transfer'
-                ? '匯款 / 收款碼免運門檻 ($2,000)'
+                ? '匯款免運門檻 ($2,000)'
                 : '7-11 賣貨便免運門檻 ($1,500)';
 
             if (finance.isFreeShipping && finance.subtotal > 0) {
@@ -1188,7 +1217,7 @@
                 cartBar.style.width = `${finance.percent}%`;
                 cartTip.innerText = `還差 NT$ ${finance.diff} 免運`;
                 cartTip.className = 'text-orange-700 font-bold';
-                shippingEl.innerText = `NT$ ${SHIPPING_FEE_STANDARD}`;
+                shippingEl.innerText = `NT$ ${finance.baseShipping}`;
             }
 
             const instockBox = document.getElementById('instock-method-box');
@@ -1230,7 +1259,7 @@
                     btnMyship.className = "p-2 rounded-xl border border-stone-300 bg-white text-left transition hover:border-stone-400";
                     btnBank.className = "p-2 rounded-xl border-2 border-stone-900 bg-stone-100 text-left transition";
                     proceedBtn.className = "w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5";
-                    proceedBtn.innerHTML = `<i class="ph ph-qr-code text-base"></i><span>填寫收件資料 (匯款 / 收款碼結帳)</span>`;
+                    proceedBtn.innerHTML = `<i class="ph ph-bank text-base"></i><span>填寫收件資料 (匯款結帳)</span>`;
                 }
             } else {
                 instockBox.classList.add('hidden');
@@ -1269,22 +1298,19 @@
             totalEl.innerText = `NT$ ${finance.total.toLocaleString()}`;
         }
 
-        // 點擊購物車結帳主按鈕的分流動作
         function handleCartProceed() {
             if (cart.length === 0) return;
             const finance = calculateCartFinance();
 
-            // 情況 1：全是現貨且選擇「7-11 賣貨便直接下單」➔ 直接開啟賣貨便網址，不留紀錄
             if (finance.effectiveMode === 'myship_direct') {
                 if (!myshipStoreUrl || !myshipStoreUrl.startsWith('http')) {
-                    showToast('⚠️ 賣家尚未設定賣貨便賣場連結，請改選「匯款 / 收款碼」或聯繫 LINE@ 客服！');
+                    showToast('⚠️ 賣家尚未設定賣貨便賣場連結，請改選「匯款」或聯繫 LINE@ 客服！');
                     return;
                 }
                 window.open(myshipStoreUrl, '_blank');
                 return;
             }
 
-            // 情況 2：現貨選「匯款 / 收款碼」或包含「海外預購」➔ 開啟對應表單
             document.getElementById('modal-subtotal').innerText = `NT$ ${finance.subtotal.toLocaleString()}`;
             document.getElementById('modal-shipping').innerText = finance.shippingFee === 0 ? 'NT$ 0 (免運)' : `NT$ ${finance.shippingFee}`;
             document.getElementById('modal-total').innerText = `NT$ ${finance.total.toLocaleString()}`;
@@ -1297,23 +1323,23 @@
 
             if (finance.effectiveMode === 'bank_transfer') {
                 titleEl.innerText = '填寫現貨匯款 / 純取貨寄件資料';
-                shipLabel.innerText = '7-11 純取貨運費 (滿 $2,000 免運)';
+                shipLabel.innerText = '7-11 純取貨運費 ($60，滿 $2,000 免運)';
                 storeField.classList.remove('hidden');
                 storeInput.required = true;
                 bannerEl.className = "bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs space-y-1 text-amber-950";
                 bannerEl.innerHTML = `
                     <div class="flex items-center space-x-1.5 font-bold text-amber-800">
-                        <i class="ph ph-qr-code text-base"></i>
-                        <span>現貨先匯款 / 收款碼結帳流程</span>
+                        <i class="ph ph-bank text-base"></i>
+                        <span>現貨匯款結帳流程</span>
                     </div>
                     <p class="text-[11px] leading-relaxed">
-                        1. 送出表單後，<strong>請點擊畫面按鈕至 LINE@ 傳送訂單編號</strong>，機器人將立即回覆<strong>匯款帳號與收款碼卡片</strong>（未綁定視為下單未完成）。<br>
-                        2. 匯款完成後，賣家將直接為您建立 <strong>7-11 賣貨便純取貨寄件單</strong> 寄出，免再二次下單！
+                        1. 送出表單後，畫面將<strong>直接顯示匯款帳號</strong>，同時請點擊按鈕至 LINE@ 傳送訂單編號完成綁定（未綁定視為下單未完成）。<br>
+                        2. 匯款完成並於 LINE 回報帳號後五碼後，賣家將直接建立 <strong>7-11 純取貨寄件單</strong> 寄出！
                     </p>
                 `;
             } else {
                 titleEl.innerText = '填寫代購委託聯絡資料';
-                shipLabel.innerText = '7-11 賣貨便運費 (滿 $1,500 免運)';
+                shipLabel.innerText = '7-11 賣貨便運費 ($38，滿 $1,500 免運)';
                 storeField.classList.add('hidden');
                 storeInput.required = false;
                 bannerEl.className = "bg-rose-50 border border-rose-200 p-3 rounded-xl text-xs space-y-1 text-rose-950";
@@ -1398,6 +1424,8 @@
                     return;
                 }
 
+                const verifiedTotal = result.totalAmount !== undefined ? result.totalAmount : finance.total;
+
                 const confirmedOrder = {
                     orderId: result.orderId || orderId,
                     orderDate: nowString,
@@ -1405,13 +1433,13 @@
                     phone: phone,
                     lineId: lineId,
                     paymentMethod: finance.effectiveMode,
+                    supplyModeLabel: isBankMode ? '現貨匯款(純取貨)' : types,
                     storeName: storeName,
                     itemsSummary: itemsSummary,
                     categories: categories,
-                    types: types,
                     subtotal: result.subtotal !== undefined ? result.subtotal : finance.subtotal,
                     shippingFee: result.shippingFee !== undefined ? result.shippingFee : finance.shippingFee,
-                    totalAmount: result.totalAmount !== undefined ? result.totalAmount : finance.total,
+                    totalAmount: verifiedTotal,
                     note: note,
                     status: 'NEW',
                     lineBound: false
@@ -1434,9 +1462,23 @@
                 updateStats();
 
                 document.getElementById('success-order-id').innerText = confirmedOrder.orderId;
-                document.getElementById('success-modal-desc').innerText = isBankMode
-                    ? '點擊下方綠色按鈕傳送訂單編號後，LINE@ 機器人將立即回覆「匯款帳號與收款碼卡片」，完成匯款後即為您安排純取貨寄出！'
-                    : '點擊下方綠色按鈕傳送訂單編號後，才算完成排單；商品抵台時將透過 LINE@ 傳送賣貨便下單連結給您！';
+
+                // 若為現貨匯款模式，直接在完成彈窗顯示匯款帳戶與應匯總額（減少斷點）
+                const bankBox = document.getElementById('success-bank-box');
+                if (isBankMode) {
+                    bankBox.classList.remove('hidden');
+                    document.getElementById('success-bank-amount').innerText = `應匯：NT$ ${verifiedTotal.toLocaleString()}`;
+                    document.getElementById('success-bank-text').innerText = result.bankInfo || '請點擊下方按鈕至 LINE@ 取得匯款帳號';
+                    document.getElementById('success-modal-desc').innerText =
+                        '請先複製上方帳號完成匯款，並點擊下方綠色按鈕至 LINE@ 傳送訂單編號完成綁定與回報帳號後五碼！';
+                    document.getElementById('success-line-btn-label').innerText = '前往 LINE@ 綁定編號並回報後五碼';
+                } else {
+                    bankBox.classList.add('hidden');
+                    document.getElementById('success-modal-desc').innerText =
+                        '點擊下方綠色按鈕傳送訂單編號後，才算完成排單；商品抵台時將透過 LINE@ 傳送賣貨便下單連結給您！';
+                    document.getElementById('success-line-btn-label').innerText = '立即前往 LINE@ 傳送編號完成下單';
+                }
+
                 document.getElementById('success-line-link').href = `https://line.me/R/oaMessage/${encodeURIComponent(MY_LINE_OA_ID)}/?${encodeURIComponent(confirmedOrder.orderId)}`;
                 document.getElementById('order-success-modal').classList.remove('hidden');
 
@@ -1486,7 +1528,7 @@
 
             filteredOrders.forEach(order => {
                 const isBound = order.lineBound || (order.lineId && String(order.lineId).startsWith('U'));
-                const isBank = order.paymentMethod === 'bank_transfer' || String(order.paymentMethod).includes('匯款');
+                const isBank = order.paymentMethod === 'bank_transfer' || String(order.supplyModeLabel || '').includes('匯款');
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-stone-50 border-b border-stone-100 text-xs";
                 tr.innerHTML = `
@@ -1494,7 +1536,7 @@
                         <div class="font-bold text-stone-900">${order.orderId}</div>
                         <div class="text-[10px] text-stone-400 mt-0.5">${order.orderDate}</div>
                         <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded font-sans font-bold ${isBank ? 'bg-amber-100 text-amber-900' : 'bg-purple-100 text-purple-900'}">
-                            ${isBank ? '💳 現貨匯款/純取貨' : '✈️ 預購抵台賣貨便'}
+                            ${order.supplyModeLabel || (isBank ? '現貨匯款(純取貨)' : '預購抵台賣貨便')}
                         </span>
                     </td>
                     <td class="p-3 align-top">
