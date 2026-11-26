@@ -199,6 +199,7 @@
                     <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong></span>
                     <span class="text-emerald-700 font-medium flex items-center space-x-1">
                         <i class="ph ph-check-circle"></i>
+                        <span>已連線 Ann 選品庫存</span>
                     </span>
                 </div>
             </div>
@@ -420,7 +421,7 @@
                     </button>
                 </div>
 
-                <!-- 免運門檻進度條（依結帳方式自動切換 $1,500 或 $2,000） -->
+                <!-- 免運門檻進度條 -->
                 <div class="bg-orange-50 px-4 py-2.5 border-b border-orange-100 text-xs">
                     <div class="flex justify-between font-bold text-stone-800">
                         <span id="cart-shipping-rule-title">7-11 賣貨便免運門檻 ($1,500)</span>
@@ -436,7 +437,7 @@
 
                 <!-- 購物車底部結算與結帳方式選擇 -->
                 <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-3">
-                    <!-- 🌟 純現貨專屬：結帳方式選擇器（購物車全是現貨時顯示） -->
+                    <!-- 純現貨專屬：結帳方式選擇器 -->
                     <div id="instock-method-box" class="hidden space-y-1.5">
                         <div class="text-[11px] font-bold text-stone-700 flex items-center justify-between">
                             <span>⚡ 全館現貨，請選擇結帳方式：</span>
@@ -488,7 +489,7 @@
         </div>
     </div>
 
-    <!-- 結帳資料填寫彈窗（匯款模式自動顯示 7-11 取件門市欄位；預購模式隱藏） -->
+    <!-- 結帳資料填寫彈窗 -->
     <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 backdrop-blur-sm hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-stone-100">
@@ -522,7 +523,7 @@
                     </div>
                 </div>
 
-                <!-- 🌟 僅在「現貨匯款/收款碼」模式顯示的 7-11 取件門市欄位 -->
+                <!-- 僅在「現貨匯款/收款碼」模式顯示的 7-11 取件門市欄位 -->
                 <div id="bank-store-field" class="hidden">
                     <div class="flex justify-between items-center mb-1">
                         <label class="font-bold text-stone-700">7-11 純取貨門市與店號 *</label>
@@ -622,7 +623,7 @@
     <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none"></div>
 
     <script>
-        // 👇 請貼上你的 Google Apps Script (/exec) 網址與共用 7-11 賣貨便賣場網址
+        // 👇 已填入你的 Google Apps Script (/exec) 網址與共用 7-11 賣貨便賣場網址
         const DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxhcuPL99aT5FRGvnlWw7-hsu-HQQOJGIHey4nB5wfRZrYlfHSETxMmE4BMxYBeEfE/exec';
         const DEFAULT_MYSHIP_URL = 'https://myship.7-11.com.tw/general/detail/GM2508203564365?fbclid=PAQ0xDSwMTy4FleHRuA2FlbQIxMQABp08VDelPETmNztCfd6ScZjaKON37rPywDcdbjG4kpDaHrfNNruR20BCt-Uzd_aem_bNz_GyenKc1vFu3u4DpABw';
 
@@ -673,7 +674,7 @@
         const ORDER_STATUS_MAP = {
             'NEW': { label: '新進訂單 (待確認)', color: 'bg-amber-100 text-amber-800' },
             'PURCHASING': { label: '海外採購 / 待對帳', color: 'bg-blue-100 text-blue-800' },
-            'FLIGHT': { label: '理貨中', color: 'bg-purple-100 text-purple-800' },
+            'FLIGHT': { label: '國際空運抵台檢驗中', color: 'bg-purple-100 text-purple-800' },
             'SHIPPED': { label: '已出貨至 7-11 賣貨便', color: 'bg-emerald-100 text-emerald-800' },
             'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
         };
@@ -878,6 +879,7 @@
                 const imgs = getProductImages(p);
                 const hasMultiple = imgs.length > 1;
                 const curIdx = Math.min(cardImageIndices[p.name] || 0, imgs.length - 1);
+                const escapedNameAttr = p.name.replace(/"/g, '&quot;');
 
                 const card = document.createElement('div');
                 card.className = `group bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-xs transition-all flex flex-col select-none ${
@@ -917,21 +919,21 @@
 
                 const dotsHtml = hasMultiple
                     ? `<div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center space-x-1 bg-stone-900/50 backdrop-blur-xs px-2 py-1 rounded-full">
-                        ${imgs.map((_, idx) => `<span data-card-dot="${p.name.replace(/"/g, '"')}" class="${idx === curIdx ? 'w-2 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/75'} rounded-full transition-all"></span>`).join('')}
+                        ${imgs.map((_, idx) => `<span data-card-dot="${escapedNameAttr}" class="${idx === curIdx ? 'w-2 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/75'} rounded-full transition-all"></span>`).join('')}
                        </div>`
                     : '';
 
                 const multiBadgeHtml = hasMultiple
                     ? `<div class="absolute top-2 right-2 bg-stone-900/75 text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 backdrop-blur-xs">
                          <i class="ph ph-images text-xs text-amber-300"></i>
-                         <span data-card-counter="${p.name.replace(/"/g, '"')}">${curIdx + 1}/${imgs.length}</span>
+                         <span data-card-counter="${escapedNameAttr}">${curIdx + 1}/${imgs.length}</span>
                        </div>`
                     : `<div class="absolute bottom-2 right-2 bg-stone-900/60 text-white p-1.5 rounded-lg opacity-80 group-hover:opacity-100 transition">
                          <i class="ph ph-magnifying-glass-plus text-xs"></i>
                        </div>`;
 
                 imgBox.innerHTML = `
-                    <img data-card-img="${p.name.replace(/"/g, '"')}" src="${imgs[curIdx]}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                    <img data-card-img="${escapedNameAttr}" src="${imgs[curIdx]}" alt="${escapedNameAttr}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
                     <div class="absolute top-2 left-2">
                         ${isSoldOut
                             ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
@@ -961,7 +963,7 @@
 
                 infoBox.innerHTML = `
                     <div>
-                        <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition" title="${p.name}">
+                        <h3 class="font-bold text-xs text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition" title="${escapedNameAttr}">
                             ${p.name}
                         </h3>
                         <p class="text-[11px] text-stone-500 mt-1 line-clamp-1">${p.description}</p>
@@ -1130,7 +1132,6 @@
 
         function calculateCartFinance() {
             const allInstock = isCartAllInstock();
-            // 僅當「全是現貨」且「選擇匯款/收款碼」時為 $2,000 免運，其餘皆為 $1,500 免運
             const effectiveMode = allInstock ? selectedInstockMode : 'preorder_myship';
             const threshold = (effectiveMode === 'bank_transfer') ? FREE_SHIPPING_BANK : FREE_SHIPPING_MYSHIP;
 
@@ -1148,7 +1149,6 @@
             document.getElementById('cart-count').innerText = cart.reduce((acc, c) => acc + c.quantity, 0);
             const finance = calculateCartFinance();
 
-            // 更新頂部橫幅免運進度
             const topLabel = document.getElementById('top-shipping-label');
             const freeBar = document.getElementById('free-shipping-bar');
             const freeTag = document.getElementById('free-shipping-tag');
@@ -1167,7 +1167,6 @@
                 freeTag.className = 'font-bold text-amber-200';
             }
 
-            // 更新購物車內免運進度條
             const container = document.getElementById('cart-items-container');
             const subtotalEl = document.getElementById('cart-subtotal');
             const shippingEl = document.getElementById('cart-shipping-fee');
@@ -1192,7 +1191,6 @@
                 shippingEl.innerText = `NT$ ${SHIPPING_FEE_STANDARD}`;
             }
 
-            // 顯示或隱藏「純現貨雙結帳模式選擇器」
             const instockBox = document.getElementById('instock-method-box');
             const preorderBox = document.getElementById('preorder-notice-box');
             const btnMyship = document.getElementById('btn-mode-myship');
