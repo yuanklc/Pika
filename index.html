@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pika__Ann 海外代購選品店 - by Ann</title>
+    <title>Pika__Ann 代購選品店 - by Ann</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons CDN -->
@@ -60,7 +60,7 @@
     <div class="bg-stone-900 text-stone-200 text-xs py-1.5 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 tracking-wide">
         <div class="flex items-center space-x-2">
             <span class="inline-block w-2 h-2 rounded-full bg-line animate-ping"></span>
-            <span><strong>Pika__Ann</strong> 官方代購 ✦ 運送方式：<strong>7-11 賣貨便</strong> (運費 $38，滿 $1,500 免運！)</span>
+            <span><strong>Pika__Ann</strong> 官方代購 ✦ <strong>7-11 賣貨便</strong>滿 $1,500 免運｜<strong>匯款/收款碼</strong>滿 $2,000 免運！</span>
         </div>
         
         <div class="flex items-center space-x-3 text-[11px]">
@@ -87,7 +87,7 @@
                 <div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xl font-black tracking-tight text-stone-900 font-serif">Pika__Ann</span>
-                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">海外選品</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">海內外選品</span>
                     </div>
                     <span class="text-[10px] text-stone-500 block">Curated by Ann ✦ 正品代購</span>
                 </div>
@@ -135,15 +135,15 @@
                 <div class="space-y-1 text-center md:text-left">
                     <div class="inline-flex items-center space-x-1.5 bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur">
                         <i class="ph ph-truck text-sm"></i>
-                        <span>7-11 賣貨便常態配合 ✦ 滿 NT$1,500 免運 (未達運費 $38)</span>
+                        <span>7-11 賣貨便滿 $1,500 免運 ✦ 匯款/收款碼滿 $2,000 免運</span>
                     </div>
                     <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
-                    <p class="text-xs text-orange-100">點圖片可左右滑動或放大看多張細節照，點下方價格區即可加入購物車！</p>
+                    <p class="text-xs text-orange-100">點圖片可左右滑動或放大看細節照，全館現貨支援賣貨便直購或匯款寄件！</p>
                 </div>
 
                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 w-full md:w-80 text-xs space-y-1.5">
                     <div class="flex justify-between items-center text-[11px]">
-                        <span>賣貨便免運進度 ($1,500 門檻)</span>
+                        <span id="top-shipping-label">免運進度 ($1,500 門檻)</span>
                         <span id="free-shipping-tag" class="font-bold text-amber-200">還差 $1,500</span>
                     </div>
                     <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
@@ -199,7 +199,6 @@
                     <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong></span>
                     <span class="text-emerald-700 font-medium flex items-center space-x-1">
                         <i class="ph ph-check-circle"></i>
-                        <span>已連線 Ann 選品庫存</span>
                     </span>
                 </div>
             </div>
@@ -216,7 +215,7 @@
                     <div>
                         <div class="flex items-center space-x-2">
                             <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">後台端點</span>
-                            <h2 class="text-lg font-bold text-stone-900 font-serif">Google Apps Script Web App 連結設定</h2>
+                            <h2 class="text-lg font-bold text-stone-900 font-serif">Google Apps Script & 賣貨便連結設定</h2>
                         </div>
                     </div>
                     <button onclick="testConnectionToSheet()" id="test-conn-btn" class="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 transition">
@@ -225,12 +224,19 @@
                     </button>
                 </div>
 
-                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
-                    <label class="block text-xs font-bold text-stone-800">
-                        Apps Script Web App 網址 (doPost 接收訂單端點) *
-                    </label>
-                    <input type="url" id="sheet-app-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    <p class="text-[11px] text-stone-500">所有買家在前台提交的訂單都會即時透過此網址送入 Google 試算表，並觸發 LINE 通知。</p>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-800 mb-1">
+                            Apps Script Web App 網址 (/exec 端點) *
+                        </label>
+                        <input type="url" id="sheet-app-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-800 mb-1">
+                            7-11 賣貨便通用賣場網址 (純現貨直購跳轉用) *
+                        </label>
+                        <input type="url" id="myship-store-url" placeholder="https://myship.7-11.com.tw/general/detail/..." class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    </div>
                 </div>
 
                 <div id="conn-result-box" class="hidden p-4 rounded-xl border text-xs space-y-1.5 transition-all"></div>
@@ -255,7 +261,7 @@
                     <p id="stat-pending-orders" class="text-2xl font-bold text-amber-600 mt-1 font-mono">0</p>
                 </div>
                 <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
-                    <span class="text-xs text-stone-500 font-medium">賣貨便免運單數</span>
+                    <span class="text-xs text-stone-500 font-medium">免運單數</span>
                     <p id="stat-free-ship-orders" class="text-2xl font-bold text-emerald-600 mt-1 font-mono">0</p>
                 </div>
                 <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-sm">
@@ -289,7 +295,7 @@
                     </button>
 
                     <button onclick="setOrderTab('PURCHASING')" id="tab-btn-PURCHASING" class="order-tab-btn py-2.5 px-3 border-b-2 border-transparent text-stone-500 hover:text-stone-800 flex items-center space-x-1.5 transition">
-                        <span>採購中</span>
+                        <span>採購中 / 待對帳</span>
                         <span id="tab-count-PURCHASING" class="bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
                     </button>
 
@@ -313,11 +319,12 @@
                     <table class="w-full text-left text-xs text-stone-600">
                         <thead class="bg-stone-100 text-stone-500 uppercase font-semibold border-b border-stone-200">
                             <tr>
-                                <th class="p-3">訂單編號 / 下單時間</th>
-                                <th class="p-3">買家資料 / LINE 綁定狀態</th>
-                                <th class="p-3">選購明細 (含現貨/預購)</th>
+                                <th class="p-3">訂單編號 / 模式</th>
+                                <th class="p-3">買家資料 / LINE 綁定</th>
+                                <th class="p-3">取件門市 (匯款單)</th>
+                                <th class="p-3">選購明細</th>
                                 <th class="p-3">結算金額</th>
-                                <th class="p-3">訂單狀態 (切「抵台」自動發賣場卡)</th>
+                                <th class="p-3">訂單狀態 (自動推播卡片)</th>
                             </tr>
                         </thead>
                         <tbody id="orders-table-body" class="divide-y divide-stone-100">
@@ -338,8 +345,8 @@
     <footer class="bg-stone-900 text-stone-400 text-xs py-7 mt-12 border-t border-stone-800">
         <div class="max-w-[1500px] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div>
-                <p class="text-stone-200 font-bold tracking-tight text-sm">Pika__Ann 海外代購選物</p>
-                <p class="text-[11px] text-stone-500 mt-1">選品策劃與系統：<span class="text-amber-300 font-medium">Ann</span> ｜ 運送配合：7-11 賣貨便 (滿 $1,500 免運)</p>
+                <p class="text-stone-200 font-bold tracking-tight text-sm">Pika__Ann 代購選物</p>
+                <p class="text-[11px] text-stone-500 mt-1">選品策劃與系統：<span class="text-amber-300 font-medium">Ann</span> ｜ 7-11 賣貨便滿 $1,500 免運・匯款滿 $2,000 免運</p>
             </div>
 
             <div class="flex items-center space-x-3 text-xs">
@@ -355,10 +362,9 @@
         </div>
     </footer>
 
-    <!-- 🌟 手機／桌機共用：多圖大圖燈箱 (Lightbox) -->
+    <!-- 多圖大圖燈箱 (Lightbox) -->
     <div id="gallery-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/90 backdrop-blur-md hidden" role="dialog" aria-modal="true">
         <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
-            <!-- 燈箱頂欄 -->
             <div class="px-4 py-3 border-b border-stone-100 flex items-center justify-between bg-stone-50">
                 <div class="flex items-center space-x-2 min-w-0">
                     <span id="gallery-counter" class="bg-stone-900 text-white text-[11px] font-mono font-bold px-2 py-0.5 rounded-md flex-shrink-0">1 / 1</span>
@@ -369,7 +375,6 @@
                 </button>
             </div>
 
-            <!-- 燈箱主圖區（支援手指左右滑動切換與左右按鈕） -->
             <div id="gallery-touch-area" class="relative w-full aspect-square bg-stone-100 flex items-center justify-center overflow-hidden select-none">
                 <img id="gallery-main-img" src="" alt="" class="w-full h-full object-contain transition-opacity duration-200" onerror="this.src='https://placehold.co/600x600/fff7ed/9a3412?text=Pika__Ann'">
                 
@@ -381,11 +386,9 @@
                 </button>
             </div>
 
-            <!-- 縮圖快速切換列 -->
             <div id="gallery-thumbs" class="px-4 py-2.5 bg-stone-50 border-t border-stone-100 flex items-center gap-2 overflow-x-auto">
             </div>
 
-            <!-- 商品說明與滿版加入購物車按鈕 -->
             <div class="p-4 border-t border-stone-200 bg-white space-y-3">
                 <div class="flex items-start justify-between gap-2">
                     <p id="gallery-desc" class="text-xs text-stone-600 leading-relaxed flex-1"></p>
@@ -402,7 +405,7 @@
         </div>
     </div>
 
-    <!-- 購物車彈窗 -->
+    <!-- 購物車彈窗（支援純現貨雙結帳分流與動態免運門檻） -->
     <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm transition-opacity" onclick="toggleCartModal(false)"></div>
         <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
@@ -417,9 +420,10 @@
                     </button>
                 </div>
 
+                <!-- 免運門檻進度條（依結帳方式自動切換 $1,500 或 $2,000） -->
                 <div class="bg-orange-50 px-4 py-2.5 border-b border-orange-100 text-xs">
                     <div class="flex justify-between font-bold text-stone-800">
-                        <span>7-11 賣貨便免運門檻</span>
+                        <span id="cart-shipping-rule-title">7-11 賣貨便免運門檻 ($1,500)</span>
                         <span id="cart-free-shipping-tip" class="text-orange-700">滿 NT$1,500 免運</span>
                     </div>
                     <div class="w-full bg-stone-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
@@ -430,51 +434,75 @@
                 <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-3">
                 </div>
 
-                <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-2.5">
-                    <div class="flex justify-between text-xs text-stone-600">
-                        <span>商品小計</span>
-                        <span id="cart-subtotal" class="font-mono font-bold text-stone-900">$0</span>
-                    </div>
-                    <div class="flex justify-between text-xs text-stone-600">
-                        <span>7-11 賣貨便運費</span>
-                        <span id="cart-shipping-fee" class="font-mono font-bold text-orange-700">NT$ 38</span>
-                    </div>
-                    <div class="flex justify-between text-sm font-bold text-stone-900 border-t border-stone-200 pt-2">
-                        <span>應付總額</span>
-                        <span id="cart-total" class="font-mono text-base text-amber-700">$0</span>
+                <!-- 購物車底部結算與結帳方式選擇 -->
+                <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-3">
+                    <!-- 🌟 純現貨專屬：結帳方式選擇器（購物車全是現貨時顯示） -->
+                    <div id="instock-method-box" class="hidden space-y-1.5">
+                        <div class="text-[11px] font-bold text-stone-700 flex items-center justify-between">
+                            <span>⚡ 全館現貨，請選擇結帳方式：</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" id="btn-mode-myship" onclick="setCheckoutMode('myship_direct')" class="p-2 rounded-xl border-2 border-orange-600 bg-orange-50 text-left transition">
+                                <div class="text-[11px] font-bold text-orange-900 flex items-center space-x-1">
+                                    <i class="ph ph-storefront"></i>
+                                    <span>7-11 賣貨便</span>
+                                </div>
+                                <div class="text-[10px] text-orange-700 mt-0.5">滿 $1,500 免運・直跳賣場</div>
+                            </button>
+                            <button type="button" id="btn-mode-bank" onclick="setCheckoutMode('bank_transfer')" class="p-2 rounded-xl border border-stone-300 bg-white text-left transition hover:border-stone-400">
+                                <div class="text-[11px] font-bold text-stone-800 flex items-center space-x-1">
+                                    <i class="ph ph-qr-code"></i>
+                                    <span>匯款 / 收款碼</span>
+                                </div>
+                                <div class="text-[10px] text-stone-500 mt-0.5">滿 $2,000 免運・純取貨寄出</div>
+                            </button>
+                        </div>
                     </div>
 
-                    <button id="checkout-start-btn" onclick="openCheckoutForm()" class="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5 mt-2">
+                    <!-- 包含預購時的提示 -->
+                    <div id="preorder-notice-box" class="hidden bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-[11px] text-amber-900">
+                        ✈️ 購物車含海外預購品項，登記綁定 LINE@ 後，抵台將發送 <strong>7-11 賣貨便下單連結</strong>（滿 $1,500 免運）。
+                    </div>
+
+                    <div class="space-y-1.5 pt-1 border-t border-stone-200/70">
+                        <div class="flex justify-between text-xs text-stone-600">
+                            <span>商品小計</span>
+                            <span id="cart-subtotal" class="font-mono font-bold text-stone-900">$0</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-stone-600">
+                            <span>運費</span>
+                            <span id="cart-shipping-fee" class="font-mono font-bold text-orange-700">NT$ 38</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-bold text-stone-900 border-t border-stone-200 pt-2">
+                            <span>應付總額</span>
+                            <span id="cart-total" class="font-mono text-base text-amber-700">$0</span>
+                        </div>
+                    </div>
+
+                    <button id="checkout-start-btn" onclick="handleCartProceed()" class="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5">
                         <i class="ph ph-check-circle text-sm"></i>
-                        <span>填寫代購委託單 (送入試算表與 LINE)</span>
+                        <span>前往結帳</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 結帳資料填寫彈窗 -->
+    <!-- 結帳資料填寫彈窗（匯款模式自動顯示 7-11 取件門市欄位；預購模式隱藏） -->
     <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 backdrop-blur-sm hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-stone-100">
                 <div class="flex items-center space-x-2">
                     <div class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-xs">PA</div>
-                    <h3 class="text-base font-bold text-stone-900">填寫代購委託聯絡資料</h3>
+                    <h3 id="checkout-modal-title" class="text-base font-bold text-stone-900">填寫訂單聯絡資料</h3>
                 </div>
                 <button onclick="toggleCheckoutModal(false)" class="text-stone-400 hover:text-stone-700">
                     <i class="ph ph-x text-lg"></i>
                 </button>
             </div>
 
-            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl text-xs space-y-1 text-rose-950">
-                <div class="flex items-center space-x-1.5 font-bold text-rose-800">
-                    <i class="ph ph-warning-circle text-base"></i>
-                    <span>重要交易流程說明（請務必閱讀）</span>
-                </div>
-                <p class="text-[11px] leading-relaxed">
-                    1. 送出表單後，<strong>必須點擊畫面按鈕至 LINE@ 傳送訂單編號完成綁定</strong>；<strong>未傳送編號綁定 LINE 將視為「下單未完成」</strong>，後續無法收到賣貨便下單連結。<br>
-                    2. 商品空運抵台檢驗完成後，系統將自動推播 <strong>7-11 賣貨便下單連結</strong> 給您選擇取件門市並完成貨到付款。
-                </p>
+            <!-- 動態交易流程提示 -->
+            <div id="checkout-flow-banner" class="bg-rose-50 border border-rose-200 p-3 rounded-xl text-xs space-y-1 text-rose-950">
             </div>
 
             <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-3 text-xs">
@@ -494,8 +522,20 @@
                     </div>
                 </div>
 
+                <!-- 🌟 僅在「現貨匯款/收款碼」模式顯示的 7-11 取件門市欄位 -->
+                <div id="bank-store-field" class="hidden">
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="font-bold text-stone-700">7-11 純取貨門市與店號 *</label>
+                        <a href="https://emap.pcsc.com.tw/mobilemap/Id/Default.aspx" target="_blank" class="text-orange-700 hover:underline flex items-center space-x-1 text-[11px]">
+                            <i class="ph ph-map-pin"></i>
+                            <span>查詢 7-11 門市店號</span>
+                        </a>
+                    </div>
+                    <input type="text" id="cust-store" placeholder="例如：7-11 敦南門市 (店號: 123456)" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
                 <div>
-                    <label class="block font-bold text-stone-700 mb-1">代購需求備註 (選填)</label>
+                    <label class="block font-bold text-stone-700 mb-1">訂單備註 (選填)</label>
                     <textarea id="cust-note" rows="2" placeholder="可填寫希望保留包裝、紙袋等細節..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-stone-800 focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
                 </div>
 
@@ -505,11 +545,11 @@
                         <span id="modal-subtotal" class="font-mono font-bold">$0</span>
                     </div>
                     <div class="flex justify-between text-stone-600">
-                        <span>7-11 賣貨便運費 (滿 $1,500 免運)</span>
+                        <span id="modal-shipping-label">運費</span>
                         <span id="modal-shipping" class="font-mono font-bold text-orange-700">$38</span>
                     </div>
                     <div class="flex justify-between text-stone-900 font-bold border-t border-stone-200 pt-1 text-sm">
-                        <span>抵台賣貨便應付總額</span>
+                        <span>應付總額</span>
                         <span id="modal-total" class="font-mono text-amber-700">$0</span>
                     </div>
                 </div>
@@ -540,11 +580,8 @@
                     <i class="ph ph-warning-octagon text-base"></i>
                     <span>未傳送訂單編號綁定 LINE 將視為「下單未完成」！</span>
                 </p>
-                <p class="text-[11px] leading-relaxed text-stone-700">
-                    因商品空運抵台時需透過 LINE@ 傳送 <strong>7-11 賣貨便專屬下單連結</strong> 給您，若未完成綁定將無法收到賣場連結並取消排單。
-                </p>
-                <p class="text-[11px] font-bold text-emerald-800 border-t border-rose-200 pt-1.5">
-                    👉 點擊下方綠色按鈕後，系統已自動幫您填好訂單編號，只需在 LINE 聊天室按下「傳送」即可！
+                <p id="success-modal-desc" class="text-[11px] leading-relaxed text-stone-700">
+                    點擊下方綠色按鈕傳送訂單編號後，系統會立即回覆您後續付款或到貨通知卡片！
                 </p>
             </div>
             <div class="space-y-2">
@@ -585,10 +622,10 @@
     <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none"></div>
 
     <script>
-        // 👇 請在此貼上你已部署的 Google Apps Script Web App (/exec) 網址
+        // 👇 請貼上你的 Google Apps Script (/exec) 網址與共用 7-11 賣貨便賣場網址
         const DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxhcuPL99aT5FRGvnlWw7-hsu-HQQOJGIHey4nB5wfRZrYlfHSETxMmE4BMxYBeEfE/exec';
+        const DEFAULT_MYSHIP_URL = 'https://myship.7-11.com.tw/general/detail/GM2508203564365?fbclid=PAQ0xDSwMTy4FleHRuA2FlbQIxMQABp08VDelPETmNztCfd6ScZjaKON37rPywDcdbjG4kpDaHrfNNruR20BCt-Uzd_aem_bNz_GyenKc1vFu3u4DpABw';
 
-        // 預設商品資料（支援 images 陣列多圖輪播）
         let productsDatabase = [
             {
                 name: 'Henteko Cute 熊寶寶抱枕',
@@ -605,7 +642,8 @@
         ];
 
         const SHIPPING_FEE_STANDARD = 38;
-        const FREE_SHIPPING_THRESHOLD = 1500;
+        const FREE_SHIPPING_MYSHIP = 1500;
+        const FREE_SHIPPING_BANK = 2000;
         const MY_LINE_OA_ID = '@730clyju';
 
         const CATEGORY_NAMES = {
@@ -623,17 +661,19 @@
         let adminClickTimer = null;
         let adminClickCount = 0;
         let googleSheetUrl = DEFAULT_SHEET_URL;
+        let myshipStoreUrl = DEFAULT_MYSHIP_URL;
 
-        // 紀錄每張商品卡片目前顯示第幾張圖 { [productName]: index }
+        // 純現貨時買家選擇的結帳模式：'myship_direct'（直跳賣貨便）或 'bank_transfer'（匯款/收款碼）
+        let selectedInstockMode = 'myship_direct';
+
         let cardImageIndices = {};
-        // 大圖燈箱目前狀態
         let activeGalleryProduct = null;
         let activeGalleryIndex = 0;
 
         const ORDER_STATUS_MAP = {
             'NEW': { label: '新進訂單 (待確認)', color: 'bg-amber-100 text-amber-800' },
-            'PURCHASING': { label: '海外採購中', color: 'bg-blue-100 text-blue-800' },
-            'FLIGHT': { label: '國際空運抵台檢驗中', color: 'bg-purple-100 text-purple-800' },
+            'PURCHASING': { label: '海外採購 / 待對帳', color: 'bg-blue-100 text-blue-800' },
+            'FLIGHT': { label: '理貨中', color: 'bg-purple-100 text-purple-800' },
             'SHIPPED': { label: '已出貨至 7-11 賣貨便', color: 'bg-emerald-100 text-emerald-800' },
             'COMPLETED': { label: '買家已簽收 (完成交易)', color: 'bg-stone-200 text-stone-800' }
         };
@@ -647,6 +687,18 @@
         function getRemainingStock(prod) {
             if (!prod || prod.type === 'preorder') return Infinity;
             return Math.max(0, Math.floor(Number(prod.stock) || 0));
+        }
+
+        // 判斷目前購物車是否「全部為現貨」
+        function isCartAllInstock() {
+            if (cart.length === 0) return true;
+            return cart.every(item => item.product.type === 'instock');
+        }
+
+        // 切換純現貨結帳方式
+        function setCheckoutMode(mode) {
+            selectedInstockMode = mode;
+            updateCartUI();
         }
 
         // 後台解鎖
@@ -768,7 +820,6 @@
             document.getElementById('badge-count-home').innerText = counts.home;
         }
 
-        // 原地切換小卡片目前顯示的照片索引
         function switchCardImage(prodName, newIndex) {
             const prod = productsDatabase.find(p => p.name === prodName);
             if (!prod) return;
@@ -833,7 +884,6 @@
                     isSoldOut ? 'opacity-70' : 'hover:shadow-md hover:border-amber-400'
                 }`;
 
-                // 圖片區塊：支援手機左右滑動切圖 + 點擊開全螢幕大圖燈箱
                 const imgBox = document.createElement('div');
                 imgBox.className = "relative w-full aspect-square overflow-hidden bg-stone-100 cursor-zoom-in";
 
@@ -867,21 +917,21 @@
 
                 const dotsHtml = hasMultiple
                     ? `<div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center space-x-1 bg-stone-900/50 backdrop-blur-xs px-2 py-1 rounded-full">
-                        ${imgs.map((_, idx) => `<span data-card-dot="${p.name.replace(/"/g, '&quot;')}" class="${idx === curIdx ? 'w-2 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/75'} rounded-full transition-all"></span>`).join('')}
+                        ${imgs.map((_, idx) => `<span data-card-dot="${p.name.replace(/"/g, '"')}" class="${idx === curIdx ? 'w-2 h-1.5 bg-amber-400' : 'w-1.5 h-1.5 bg-white/75'} rounded-full transition-all"></span>`).join('')}
                        </div>`
                     : '';
 
                 const multiBadgeHtml = hasMultiple
                     ? `<div class="absolute top-2 right-2 bg-stone-900/75 text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1 backdrop-blur-xs">
                          <i class="ph ph-images text-xs text-amber-300"></i>
-                         <span data-card-counter="${p.name.replace(/"/g, '&quot;')}">${curIdx + 1}/${imgs.length}</span>
+                         <span data-card-counter="${p.name.replace(/"/g, '"')}">${curIdx + 1}/${imgs.length}</span>
                        </div>`
                     : `<div class="absolute bottom-2 right-2 bg-stone-900/60 text-white p-1.5 rounded-lg opacity-80 group-hover:opacity-100 transition">
                          <i class="ph ph-magnifying-glass-plus text-xs"></i>
                        </div>`;
 
                 imgBox.innerHTML = `
-                    <img data-card-img="${p.name.replace(/"/g, '&quot;')}" src="${imgs[curIdx]}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
+                    <img data-card-img="${p.name.replace(/"/g, '"')}" src="${imgs[curIdx]}" alt="${p.name}" class="w-full h-full object-cover ${isSoldOut ? 'grayscale' : 'group-hover:scale-105'} transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/fff7ed/9a3412?text=Pika__Ann'">
                     <div class="absolute top-2 left-2">
                         ${isSoldOut
                             ? `<span class="bg-stone-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center space-x-1">
@@ -900,7 +950,6 @@
                     ${dotsHtml}
                 `;
 
-                // 下半部資訊與購買區：整塊點擊加入購物車（防手機誤觸圖片）
                 const infoBox = document.createElement('div');
                 infoBox.className = `p-3 flex-1 flex flex-col justify-between space-y-2 ${
                     isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer active:bg-amber-50/70'
@@ -936,7 +985,7 @@
             });
         }
 
-        // ==================== 全螢幕大圖燈箱 (Lightbox) 邏輯 ====================
+        // ==================== 全螢幕大圖燈箱 (Lightbox) ====================
         function openGalleryModal(productName, startIndex = 0) {
             const prod = productsDatabase.find(p => p.name === productName);
             if (!prod) return;
@@ -973,7 +1022,6 @@
                 };
             }
 
-            // 只有 1 張圖時隱藏左右切換箭頭與縮圖列
             const hasMultiple = imgs.length > 1;
             document.getElementById('gallery-prev-btn').classList.toggle('hidden', !hasMultiple);
             document.getElementById('gallery-next-btn').classList.toggle('hidden', !hasMultiple);
@@ -1022,7 +1070,6 @@
             activeGalleryProduct = null;
         }
 
-        // 綁定燈箱大圖手指左右滑動手勢
         (function initGallerySwipe() {
             const touchArea = document.getElementById('gallery-touch-area');
             if (!touchArea) return;
@@ -1038,7 +1085,7 @@
             });
         })();
 
-        // 購物車
+        // ==================== 購物車與雙免運門檻計算 ====================
         function addToCartByName(productName) {
             const product = productsDatabase.find(p => p.name === productName);
             if (!product) return;
@@ -1082,24 +1129,37 @@
         }
 
         function calculateCartFinance() {
+            const allInstock = isCartAllInstock();
+            // 僅當「全是現貨」且「選擇匯款/收款碼」時為 $2,000 免運，其餘皆為 $1,500 免運
+            const effectiveMode = allInstock ? selectedInstockMode : 'preorder_myship';
+            const threshold = (effectiveMode === 'bank_transfer') ? FREE_SHIPPING_BANK : FREE_SHIPPING_MYSHIP;
+
             const subtotal = cart.reduce((acc, i) => acc + (i.product.price * i.quantity), 0);
-            const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+            const isFreeShipping = subtotal >= threshold;
             const shippingFee = (cart.length === 0 || isFreeShipping) ? 0 : SHIPPING_FEE_STANDARD;
             const total = subtotal + shippingFee;
-            const diff = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
-            const percent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
-            return { subtotal, isFreeShipping, shippingFee, total, diff, percent };
+            const diff = Math.max(0, threshold - subtotal);
+            const percent = Math.min(100, Math.round((subtotal / threshold) * 100));
+
+            return { subtotal, isFreeShipping, shippingFee, total, diff, percent, threshold, effectiveMode, allInstock };
         }
 
         function updateCartUI() {
             document.getElementById('cart-count').innerText = cart.reduce((acc, c) => acc + c.quantity, 0);
             const finance = calculateCartFinance();
 
+            // 更新頂部橫幅免運進度
+            const topLabel = document.getElementById('top-shipping-label');
             const freeBar = document.getElementById('free-shipping-bar');
             const freeTag = document.getElementById('free-shipping-tag');
+            if (topLabel) {
+                topLabel.innerText = finance.effectiveMode === 'bank_transfer'
+                    ? '匯款/收款碼免運進度 ($2,000 門檻)'
+                    : '7-11 賣貨便免運進度 ($1,500 門檻)';
+            }
             if (finance.isFreeShipping && finance.subtotal > 0) {
                 freeBar.style.width = '100%';
-                freeTag.innerText = '🎉 已達標！享賣貨便免運';
+                freeTag.innerText = '🎉 已達標！享免運優惠';
                 freeTag.className = 'font-bold text-emerald-300';
             } else {
                 freeBar.style.width = `${finance.percent}%`;
@@ -1107,27 +1167,42 @@
                 freeTag.className = 'font-bold text-amber-200';
             }
 
+            // 更新購物車內免運進度條
             const container = document.getElementById('cart-items-container');
             const subtotalEl = document.getElementById('cart-subtotal');
             const shippingEl = document.getElementById('cart-shipping-fee');
             const totalEl = document.getElementById('cart-total');
             const cartBar = document.getElementById('cart-free-shipping-progress');
             const cartTip = document.getElementById('cart-free-shipping-tip');
+            const cartRuleTitle = document.getElementById('cart-shipping-rule-title');
+
+            cartRuleTitle.innerText = finance.effectiveMode === 'bank_transfer'
+                ? '匯款 / 收款碼免運門檻 ($2,000)'
+                : '7-11 賣貨便免運門檻 ($1,500)';
 
             if (finance.isFreeShipping && finance.subtotal > 0) {
                 cartBar.style.width = '100%';
-                cartTip.innerText = '🎉 已達標！享 7-11 賣貨便免運！';
+                cartTip.innerText = '🎉 已達標！享免運優惠！';
                 cartTip.className = 'text-emerald-600 font-bold';
                 shippingEl.innerHTML = '<span class="text-emerald-600 font-bold">NT$ 0 (免運)</span>';
             } else {
                 cartBar.style.width = `${finance.percent}%`;
-                cartTip.innerText = `還差 NT$ ${finance.diff} 享賣貨便免運`;
+                cartTip.innerText = `還差 NT$ ${finance.diff} 免運`;
                 cartTip.className = 'text-orange-700 font-bold';
                 shippingEl.innerText = `NT$ ${SHIPPING_FEE_STANDARD}`;
             }
 
+            // 顯示或隱藏「純現貨雙結帳模式選擇器」
+            const instockBox = document.getElementById('instock-method-box');
+            const preorderBox = document.getElementById('preorder-notice-box');
+            const btnMyship = document.getElementById('btn-mode-myship');
+            const btnBank = document.getElementById('btn-mode-bank');
+            const proceedBtn = document.getElementById('checkout-start-btn');
+
             container.innerHTML = '';
             if (cart.length === 0) {
+                instockBox.classList.add('hidden');
+                preorderBox.classList.add('hidden');
                 container.innerHTML = `
                     <div class="h-56 flex flex-col items-center justify-center text-stone-400 text-center space-y-2">
                         <i class="ph ph-shopping-bag text-4xl text-stone-300"></i>
@@ -1136,13 +1211,35 @@
                 `;
                 subtotalEl.innerText = '$0';
                 totalEl.innerText = '$0';
-                document.getElementById('checkout-start-btn').disabled = true;
-                document.getElementById('checkout-start-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                proceedBtn.disabled = true;
+                proceedBtn.className = "w-full bg-stone-900 text-white py-3 rounded-xl font-bold text-xs opacity-50 cursor-not-allowed flex items-center justify-center space-x-1.5";
+                proceedBtn.innerHTML = `<i class="ph ph-check-circle text-sm"></i><span>前往結帳</span>`;
                 return;
             }
 
-            document.getElementById('checkout-start-btn').disabled = false;
-            document.getElementById('checkout-start-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+            proceedBtn.disabled = false;
+
+            if (finance.allInstock) {
+                instockBox.classList.remove('hidden');
+                preorderBox.classList.add('hidden');
+
+                if (selectedInstockMode === 'myship_direct') {
+                    btnMyship.className = "p-2 rounded-xl border-2 border-orange-600 bg-orange-50 text-left transition";
+                    btnBank.className = "p-2 rounded-xl border border-stone-300 bg-white text-left transition hover:border-stone-400";
+                    proceedBtn.className = "w-full bg-myship hover:bg-orange-700 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5";
+                    proceedBtn.innerHTML = `<i class="ph ph-arrow-square-out text-base"></i><span>前往 7-11 賣貨便直接下單</span>`;
+                } else {
+                    btnMyship.className = "p-2 rounded-xl border border-stone-300 bg-white text-left transition hover:border-stone-400";
+                    btnBank.className = "p-2 rounded-xl border-2 border-stone-900 bg-stone-100 text-left transition";
+                    proceedBtn.className = "w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5";
+                    proceedBtn.innerHTML = `<i class="ph ph-qr-code text-base"></i><span>填寫收件資料 (匯款 / 收款碼結帳)</span>`;
+                }
+            } else {
+                instockBox.classList.add('hidden');
+                preorderBox.classList.remove('hidden');
+                proceedBtn.className = "w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center space-x-1.5";
+                proceedBtn.innerHTML = `<i class="ph ph-check-circle text-sm"></i><span>填寫代購委託單 (送入試算表與 LINE)</span>`;
+            }
 
             cart.forEach(i => {
                 const safeNameArg = i.product.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
@@ -1174,12 +1271,66 @@
             totalEl.innerText = `NT$ ${finance.total.toLocaleString()}`;
         }
 
-        function openCheckoutForm() {
+        // 點擊購物車結帳主按鈕的分流動作
+        function handleCartProceed() {
             if (cart.length === 0) return;
             const finance = calculateCartFinance();
+
+            // 情況 1：全是現貨且選擇「7-11 賣貨便直接下單」➔ 直接開啟賣貨便網址，不留紀錄
+            if (finance.effectiveMode === 'myship_direct') {
+                if (!myshipStoreUrl || !myshipStoreUrl.startsWith('http')) {
+                    showToast('⚠️ 賣家尚未設定賣貨便賣場連結，請改選「匯款 / 收款碼」或聯繫 LINE@ 客服！');
+                    return;
+                }
+                window.open(myshipStoreUrl, '_blank');
+                return;
+            }
+
+            // 情況 2：現貨選「匯款 / 收款碼」或包含「海外預購」➔ 開啟對應表單
             document.getElementById('modal-subtotal').innerText = `NT$ ${finance.subtotal.toLocaleString()}`;
             document.getElementById('modal-shipping').innerText = finance.shippingFee === 0 ? 'NT$ 0 (免運)' : `NT$ ${finance.shippingFee}`;
             document.getElementById('modal-total').innerText = `NT$ ${finance.total.toLocaleString()}`;
+
+            const titleEl = document.getElementById('checkout-modal-title');
+            const bannerEl = document.getElementById('checkout-flow-banner');
+            const storeField = document.getElementById('bank-store-field');
+            const storeInput = document.getElementById('cust-store');
+            const shipLabel = document.getElementById('modal-shipping-label');
+
+            if (finance.effectiveMode === 'bank_transfer') {
+                titleEl.innerText = '填寫現貨匯款 / 純取貨寄件資料';
+                shipLabel.innerText = '7-11 純取貨運費 (滿 $2,000 免運)';
+                storeField.classList.remove('hidden');
+                storeInput.required = true;
+                bannerEl.className = "bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs space-y-1 text-amber-950";
+                bannerEl.innerHTML = `
+                    <div class="flex items-center space-x-1.5 font-bold text-amber-800">
+                        <i class="ph ph-qr-code text-base"></i>
+                        <span>現貨先匯款 / 收款碼結帳流程</span>
+                    </div>
+                    <p class="text-[11px] leading-relaxed">
+                        1. 送出表單後，<strong>請點擊畫面按鈕至 LINE@ 傳送訂單編號</strong>，機器人將立即回覆<strong>匯款帳號與收款碼卡片</strong>（未綁定視為下單未完成）。<br>
+                        2. 匯款完成後，賣家將直接為您建立 <strong>7-11 賣貨便純取貨寄件單</strong> 寄出，免再二次下單！
+                    </p>
+                `;
+            } else {
+                titleEl.innerText = '填寫代購委託聯絡資料';
+                shipLabel.innerText = '7-11 賣貨便運費 (滿 $1,500 免運)';
+                storeField.classList.add('hidden');
+                storeInput.required = false;
+                bannerEl.className = "bg-rose-50 border border-rose-200 p-3 rounded-xl text-xs space-y-1 text-rose-950";
+                bannerEl.innerHTML = `
+                    <div class="flex items-center space-x-1.5 font-bold text-rose-800">
+                        <i class="ph ph-warning-circle text-base"></i>
+                        <span>重要交易流程說明（請務必閱讀）</span>
+                    </div>
+                    <p class="text-[11px] leading-relaxed">
+                        1. 送出表單後，<strong>必須點擊畫面按鈕至 LINE@ 傳送訂單編號完成綁定</strong>；<strong>未傳送編號綁定 LINE 將視為「下單未完成」</strong>。<br>
+                        2. 商品空運抵台檢驗完成後，系統將自動推播 <strong>7-11 賣貨便下單連結</strong> 給您選擇取件門市並貨到付款。
+                    </p>
+                `;
+            }
+
             toggleCartModal(false);
             toggleCheckoutModal(true);
         }
@@ -1197,16 +1348,19 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-sm"></i><span>正在核對庫存並建立訂單...</span>`;
 
+            const finance = calculateCartFinance();
+            const isBankMode = finance.effectiveMode === 'bank_transfer';
+
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
             const lineId = document.getElementById('cust-line').value.trim();
+            const storeName = isBankMode ? document.getElementById('cust-store').value.trim() : '';
             const note = document.getElementById('cust-note').value.trim();
 
             try {
-                localStorage.setItem('pa_buyer_info', JSON.stringify({ name, phone, lineId }));
+                localStorage.setItem('pa_buyer_info', JSON.stringify({ name, phone, lineId, storeName }));
             } catch (err) {}
 
-            const finance = calculateCartFinance();
             const orderId = 'PA-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + Math.floor(1000 + Math.random() * 9000);
             const nowString = new Date().toLocaleString('zh-TW', { hour12: false });
 
@@ -1226,6 +1380,8 @@
                 customerName: name,
                 phone: phone,
                 lineId: lineId,
+                paymentMethod: finance.effectiveMode,
+                storeName: storeName,
                 cartItems: cartItemsPayload,
                 note: note
             };
@@ -1250,6 +1406,8 @@
                     customerName: name,
                     phone: phone,
                     lineId: lineId,
+                    paymentMethod: finance.effectiveMode,
+                    storeName: storeName,
                     itemsSummary: itemsSummary,
                     categories: categories,
                     types: types,
@@ -1278,6 +1436,9 @@
                 updateStats();
 
                 document.getElementById('success-order-id').innerText = confirmedOrder.orderId;
+                document.getElementById('success-modal-desc').innerText = isBankMode
+                    ? '點擊下方綠色按鈕傳送訂單編號後，LINE@ 機器人將立即回覆「匯款帳號與收款碼卡片」，完成匯款後即為您安排純取貨寄出！'
+                    : '點擊下方綠色按鈕傳送訂單編號後，才算完成排單；商品抵台時將透過 LINE@ 傳送賣貨便下單連結給您！';
                 document.getElementById('success-line-link').href = `https://line.me/R/oaMessage/${encodeURIComponent(MY_LINE_OA_ID)}/?${encodeURIComponent(confirmedOrder.orderId)}`;
                 document.getElementById('order-success-modal').classList.remove('hidden');
 
@@ -1327,12 +1488,16 @@
 
             filteredOrders.forEach(order => {
                 const isBound = order.lineBound || (order.lineId && String(order.lineId).startsWith('U'));
+                const isBank = order.paymentMethod === 'bank_transfer' || String(order.paymentMethod).includes('匯款');
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-stone-50 border-b border-stone-100 text-xs";
                 tr.innerHTML = `
                     <td class="p-3 align-top font-mono">
                         <div class="font-bold text-stone-900">${order.orderId}</div>
                         <div class="text-[10px] text-stone-400 mt-0.5">${order.orderDate}</div>
+                        <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded font-sans font-bold ${isBank ? 'bg-amber-100 text-amber-900' : 'bg-purple-100 text-purple-900'}">
+                            ${isBank ? '💳 現貨匯款/純取貨' : '✈️ 預購抵台賣貨便'}
+                        </span>
                     </td>
                     <td class="p-3 align-top">
                         <div class="font-bold text-stone-800">${order.customerName}</div>
@@ -1340,14 +1505,19 @@
                         <div class="mt-1">
                             ${isBound 
                                 ? `<span class="inline-flex items-center space-x-1 text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded text-[10px] font-bold">
-                                     <i class="ph ph-check-circle"></i><span>已綁定 LINE (可發賣場卡)</span>
+                                     <i class="ph ph-check-circle"></i><span>已綁定 LINE</span>
                                    </span>`
                                 : `<span class="inline-flex items-center space-x-1 text-rose-800 bg-rose-100 px-1.5 py-0.5 rounded text-[10px] font-bold" title="填寫名稱：${order.lineId}">
-                                     <i class="ph ph-warning-circle"></i><span>未綁定 (下單未完成)</span>
+                                     <i class="ph ph-warning-circle"></i><span>未綁定 (未完成)</span>
                                    </span>`
                             }
                         </div>
-                        ${!isBound && order.lineId ? `<div class="text-[10px] text-stone-400 mt-0.5">填寫 LINE: ${order.lineId}</div>` : ''}
+                    </td>
+                    <td class="p-3 align-top">
+                        ${order.storeName 
+                            ? `<div class="font-semibold text-stone-800 flex items-center space-x-1"><i class="ph ph-storefront text-orange-600"></i><span>${order.storeName}</span></div>`
+                            : `<span class="text-[10px] text-stone-400">抵台後買家自選</span>`
+                        }
                     </td>
                     <td class="p-3 align-top max-w-xs">
                         <div class="text-stone-700 text-[11px] leading-tight">${order.itemsSummary}</div>
@@ -1355,21 +1525,17 @@
                     </td>
                     <td class="p-3 align-top font-mono">
                         <div class="text-stone-500 text-[10px]">小計: $${order.subtotal}</div>
-                        <div class="text-orange-700 text-[10px]">賣貨便: $${order.shippingFee}</div>
+                        <div class="text-orange-700 text-[10px]">運費: $${order.shippingFee}</div>
                         <div class="text-xs font-bold text-stone-900">總額: NT$ ${order.totalAmount.toLocaleString()}</div>
                     </td>
                     <td class="p-3 align-top">
                         <select onchange="changeOrderStatus('${order.orderId}', this.value)" class="text-xs font-semibold rounded-lg border border-stone-300 bg-white p-1.5 focus:ring-2 focus:ring-line focus:outline-none cursor-pointer">
                             <option value="NEW" ${order.status === 'NEW' ? 'selected' : ''}>新進訂單 (待確認)</option>
-                            <option value="PURCHASING" ${order.status === 'PURCHASING' ? 'selected' : ''}>Ann 海外採購中</option>
+                            <option value="PURCHASING" ${order.status === 'PURCHASING' ? 'selected' : ''}>海外採購 / 已對帳備貨</option>
                             <option value="FLIGHT" ${order.status === 'FLIGHT' ? 'selected' : ''}>國際空運抵台檢驗中 (發賣場卡)</option>
                             <option value="SHIPPED" ${order.status === 'SHIPPED' ? 'selected' : ''}>已出貨至 7-11 賣貨便</option>
                             <option value="COMPLETED" ${order.status === 'COMPLETED' ? 'selected' : ''}>買家已簽收 (完成交易)</option>
                         </select>
-                        <div class="mt-1 text-[10px] text-stone-400 flex items-center space-x-1">
-                            <i class="ph ph-credit-card text-orange-600"></i>
-                            <span>切至「抵台」自動推播賣貨便卡片</span>
-                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1476,9 +1642,12 @@
 
         function saveAdminSettings() {
             const urlInput = document.getElementById('sheet-app-url');
+            const myshipInput = document.getElementById('myship-store-url');
             googleSheetUrl = urlInput.value.trim();
+            myshipStoreUrl = myshipInput.value.trim();
             localStorage.setItem('pa_sheet_url', googleSheetUrl);
-            showToast('✅ Web App 網址配置已儲存！');
+            localStorage.setItem('pa_myship_url', myshipStoreUrl);
+            showToast('✅ 端點與賣貨便網址配置已儲存！');
             syncProductsFromSheet();
         }
 
@@ -1606,16 +1775,22 @@
             if (cachedSheetUrl && cachedSheetUrl.includes('/exec')) {
                 googleSheetUrl = cachedSheetUrl;
             }
-            const input = document.getElementById('sheet-app-url');
-            if (input && googleSheetUrl) {
-                input.value = googleSheetUrl;
+            const cachedMyshipUrl = localStorage.getItem('pa_myship_url');
+            if (cachedMyshipUrl && cachedMyshipUrl.startsWith('http')) {
+                myshipStoreUrl = cachedMyshipUrl;
             }
+
+            const input = document.getElementById('sheet-app-url');
+            if (input && googleSheetUrl) input.value = googleSheetUrl;
+            const myshipInput = document.getElementById('myship-store-url');
+            if (myshipInput && myshipStoreUrl) myshipInput.value = myshipStoreUrl;
 
             try {
                 const savedBuyer = JSON.parse(localStorage.getItem('pa_buyer_info') || '{}');
                 if (savedBuyer.name) document.getElementById('cust-name').value = savedBuyer.name;
                 if (savedBuyer.phone) document.getElementById('cust-phone').value = savedBuyer.phone;
                 if (savedBuyer.lineId) document.getElementById('cust-line').value = savedBuyer.lineId;
+                if (savedBuyer.storeName) document.getElementById('cust-store').value = savedBuyer.storeName;
             } catch (e) {}
 
             selectCategory('doll');
