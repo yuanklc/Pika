@@ -137,7 +137,7 @@
                         <i class="ph ph-truck text-sm"></i>
                         <span>7-11 賣貨便滿 $1,500 免運 ✦ 匯款滿 $2,000 免運</span>
                     </div>
-                    <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ 庫存即時連線</h2>
+                    <h2 class="text-lg sm:text-xl font-bold font-serif">Pika__Ann 精選代購 ✦ </h2>
                     <p class="text-xs text-orange-100">點圖片可左右滑動或放大看細節照，全館現貨支援賣貨便直購或匯款寄件！</p>
                 </div>
 
@@ -152,15 +152,15 @@
                 </div>
             </div>
 
-            <!-- 四大獨立類別按鈕 -->
-            <div class="bg-white p-3.5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <!-- 商品分類與右側檢索列 -->
+            <div class="bg-white p-3.5 rounded-2xl border border-stone-200 shadow-sm">
+                <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+                    <!-- 左側：商品分類按鈕 -->
                     <div class="flex items-center flex-wrap gap-2">
                         <span class="text-xs font-bold text-stone-400 mr-1 flex items-center">
                             <i class="ph ph-tag mr-1"></i>商品分類:
                         </span>
 
-                        <!-- 新增：所有商品按鈕（預設啟用） -->
                         <button onclick="selectCategory('all')" id="cat-btn-all" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-amber-500 text-white shadow-sm shadow-amber-200">
                             <span>✨ 所有商品</span>
                             <span id="badge-count-all" class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full">0</span>
@@ -187,14 +187,14 @@
                         </button>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
+                    <!-- 最右側：篩選與搜尋檢索區 -->
+                    <div class="flex flex-wrap items-center justify-end gap-2 xl:ml-auto">
                         <select id="type-filter" onchange="renderProducts()" class="bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
                             <option value="all">全部模式 (現貨+預購)</option>
                             <option value="instock">⚡ 僅看現貨</option>
                             <option value="preorder">✈️ 僅看預購</option>
                         </select>
 
-                        <!-- 新增：價格與上架順序排序篩選器 -->
                         <select id="sort-filter" onchange="renderProducts()" class="bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
                             <option value="newest">🆕 最新上架優先</option>
                             <option value="oldest">📋 預設上架順序</option>
@@ -202,17 +202,18 @@
                             <option value="price_desc">💎 價格：由高到低</option>
                         </select>
 
-                        <div class="relative w-44 sm:w-56">
+                        <div class="relative w-44 sm:w-52">
                             <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-stone-400"></i>
                             <input type="text" id="product-search" oninput="renderProducts()" placeholder="搜尋選品名稱..." class="w-full bg-stone-50 border border-stone-200 rounded-xl pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800">
                         </div>
                     </div>
-
+                </div>
+            </div>
+            
                 <div class="pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
                     <span id="current-category-desc">正在檢視：<strong>娃娃 / 吊飾</strong></span>
                     <span class="text-emerald-700 font-medium flex items-center space-x-1">
                         <i class="ph ph-check-circle"></i>
-                        <span>已連線 Ann 選品庫存</span>
                     </span>
                 </div>
             </div>
